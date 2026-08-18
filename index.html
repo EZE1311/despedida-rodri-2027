@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Despedida de Rodri · Salta &amp; Jujuy · Carnaval 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --terracota:#c2542e;
+    --ocre:#d9a441;
+    --arcilla:#8c3b1e;
+    --cardon:#5f7a4a;
+    --turquesa:#2e7d8a;
+    --hornocal:#7b4a6e;
+    --puna:#1f3540;
+    --arena:#f6ecdc;
+    --crema:#fcf6ec;
+    --blanco:#fffdf8;
+    --tinta:#26292f;
+    --tinta-soft:#575d66;
+    --tinta-mute:#8b9099;
+    --linea:#e8dcc6;
+    --sh-soft:0 4px 20px rgba(90,50,30,.07);
+    --sh-card:0 8px 32px rgba(90,50,30,.09);
+    --sh-hover:0 12px 40px rgba(90,50,30,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--tinta);background:var(--crema);line-height:1.65;font-size:15.5px;-webkit-font-smoothing:antialiased}
+  .container{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  .topbar{background:linear-gradient(135deg,var(--ocre) 0%,var(--terracota) 55%,var(--arcilla) 100%);color:#fff;padding:10px 24px;text-align:center;font-size:12.5px;font-weight:500;letter-spacing:.3px}
+  .topbar strong{font-weight:700}
+
+  .hero{background:
+      linear-gradient(180deg,rgba(31,53,64,.06) 0%,rgba(194,84,46,.13) 60%,transparent 100%),
+      radial-gradient(ellipse at top left,rgba(217,164,65,.28) 0%,transparent 52%),
+      radial-gradient(ellipse at bottom right,rgba(46,125,138,.22) 0%,transparent 52%),
+      var(--crema);
+    padding:76px 0 90px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:24px;right:6%;width:220px;height:220px;background:radial-gradient(circle,var(--ocre) 0%,transparent 70%);opacity:.35;border-radius:50%;filter:blur(34px)}
+  .hero::after{content:'';position:absolute;bottom:30px;left:7%;width:280px;height:280px;background:radial-gradient(circle,var(--turquesa) 0%,transparent 70%);opacity:.22;border-radius:50%;filter:blur(44px)}
+  .hero-content{position:relative;z-index:1;text-align:center}
+  .hero-eyebrow{font-family:'Caveat',cursive;font-size:32px;color:var(--terracota);margin-bottom:6px;font-weight:700;transform:rotate(-1.5deg);display:inline-block}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-size:74px;font-weight:500;line-height:1.05;color:var(--puna);letter-spacing:-1.5px;margin-bottom:16px}
+  .hero h1 em{font-style:italic;color:var(--terracota);font-weight:400}
+  .hero-tagline{font-size:17.5px;color:var(--tinta-soft);max-width:640px;margin:0 auto 30px;line-height:1.65}
+  .hero-dates{margin-top:26px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--puna);font-style:italic}
+  .hero-dates span{display:inline-block;padding:0 14px;color:var(--ocre);font-size:18px}
+  .cd-grid{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px}
+  .cd-unit{background:var(--blanco);border-radius:18px;padding:16px 20px 12px;min-width:92px;text-align:center;box-shadow:var(--sh-soft);border:1px solid var(--linea)}
+  .cd-num{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:600;color:var(--terracota);line-height:1;font-variant-numeric:tabular-nums}
+  .cd-label{font-size:10.5px;text-transform:uppercase;letter-spacing:2px;color:var(--tinta-soft);margin-top:7px;font-weight:600}
+
+  .nav{background:rgba(252,246,236,.93);padding:15px 0;border-bottom:1px solid var(--linea);position:sticky;top:0;z-index:400;backdrop-filter:blur(10px)}
+  .nav-inner{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;font-size:12.8px;font-weight:500;color:var(--tinta-soft)}
+  .nav-inner a{color:inherit;text-decoration:none;transition:color .2s;border-bottom:1.5px solid transparent;padding-bottom:2px}
+  .nav-inner a:hover{color:var(--terracota);border-bottom-color:var(--terracota)}
+
+  section{padding:72px 0}
+  section.alt{background:var(--blanco)}
+  .section-eyebrow{font-family:'Caveat',cursive;font-size:26px;color:var(--terracota);display:block;margin-bottom:2px;font-weight:600}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;color:var(--puna);line-height:1.12;margin-bottom:14px;letter-spacing:-.5px}
+  .section-title em{font-style:italic;color:var(--terracota)}
+  .section-lead{font-size:16.5px;color:var(--tinta-soft);max-width:740px;margin-bottom:40px;line-height:1.7}
+
+  .grid{display:grid;gap:20px;margin-top:28px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+  .card{background:var(--blanco);border-radius:18px;padding:26px 24px;box-shadow:var(--sh-soft);border:1px solid var(--linea);transition:transform .3s,box-shadow .3s}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--sh-hover)}
+  .card-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--ocre) 0%,var(--terracota) 100%);display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:13px}
+  .card.t2 .card-icon{background:linear-gradient(135deg,var(--turquesa) 0%,var(--puna) 100%)}
+  .card.t3 .card-icon{background:linear-gradient(135deg,var(--cardon) 0%,#33502a 100%)}
+  .card.t4 .card-icon{background:linear-gradient(135deg,var(--hornocal) 0%,var(--arcilla) 100%)}
+  .card-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tinta-mute);font-weight:600;margin-bottom:5px}
+  .card-value{font-family:'Cormorant Garamond',serif;font-size:31px;font-weight:600;color:var(--puna);line-height:1.05;margin-bottom:3px}
+  .card-sub{font-size:13.5px;color:var(--tinta-soft);margin-top:3px}
+
+  .hl{background:linear-gradient(135deg,#fff8ec 0%,var(--blanco) 100%);border-radius:22px;padding:34px 36px;box-shadow:var(--sh-card);border-top:4px solid var(--ocre);margin:30px 0}
+  .hl.win{border-top-color:var(--cardon);background:linear-gradient(135deg,#f2f7ed 0%,var(--blanco) 100%)}
+  .hl.warn{border-top-color:var(--terracota);background:linear-gradient(135deg,#fdf0ea 0%,var(--blanco) 100%)}
+  .hl h3{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:600;color:var(--puna);margin-bottom:8px}
+  .hl p{color:var(--tinta-soft);margin-bottom:10px}
+  .hl p:last-child{margin-bottom:0}
+  .hl strong{color:var(--tinta)}
+
+  .badge{display:inline-block;font-size:10.5px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:10px}
+  .b-win{background:var(--cardon);color:#fff}
+  .b-warn{background:var(--terracota);color:#fff}
+  .b-info{background:var(--turquesa);color:#fff}
+  .b-gold{background:var(--ocre);color:#42320d}
+  .b-mute{background:var(--linea);color:var(--tinta-soft)}
+
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--blanco);border-radius:14px;overflow:hidden;box-shadow:var(--sh-soft)}
+  th{background:var(--puna);color:#fff;text-align:left;padding:13px 15px;font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;font-weight:600}
+  td{padding:12px 15px;border-bottom:1px solid var(--linea);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#fffaf1}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.total td{background:var(--arena);font-weight:700;color:var(--puna);border-top:2px solid var(--ocre)}
+  tr.best td{background:#f2f7ed}
+  .tbl-wrap{overflow-x:auto}
+
+  .day{background:var(--blanco);border-radius:20px;box-shadow:var(--sh-soft);border:1px solid var(--linea);margin-bottom:18px;overflow:hidden}
+  .day-head{display:flex;align-items:center;gap:16px;padding:20px 26px;background:linear-gradient(90deg,rgba(217,164,65,.14) 0%,transparent 60%);border-bottom:1px solid var(--linea);flex-wrap:wrap}
+  .day-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:var(--terracota);line-height:1;min-width:52px}
+  .day-t{flex:1;min-width:200px}
+  .day-t h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;color:var(--puna);line-height:1.2}
+  .day-t .day-sub{font-size:13px;color:var(--tinta-mute);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;margin-top:3px}
+  .day-sleep{font-size:12.5px;color:var(--tinta-soft);background:var(--arena);padding:6px 13px;border-radius:20px;font-weight:600;white-space:nowrap}
+  .day-body{padding:22px 26px}
+  .slot{display:flex;gap:16px;padding:11px 0;border-bottom:1px dashed var(--linea)}
+  .slot:last-child{border-bottom:none}
+  .slot-time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--terracota);min-width:62px;font-size:13.5px;padding-top:2px}
+  .slot-txt{flex:1;font-size:14.5px;color:var(--tinta-soft)}
+  .slot-txt strong{color:var(--tinta)}
+  .slot.key .slot-txt strong{color:var(--arcilla)}
+  .slot.key{background:linear-gradient(90deg,rgba(217,164,65,.1),transparent);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:8px}
+
+  #map{height:460px;border-radius:20px;box-shadow:var(--sh-card);margin-top:26px;z-index:1}
+
+  ul.clean{list-style:none;margin:12px 0}
+  ul.clean li{padding:7px 0 7px 26px;position:relative;color:var(--tinta-soft);font-size:14.5px}
+  ul.clean li::before{content:'▸';position:absolute;left:6px;color:var(--ocre);font-weight:700}
+  ul.clean li strong{color:var(--tinta)}
+  ul.check li::before{content:'☐';color:var(--turquesa);left:4px}
+  ul.warn li::before{content:'!';color:var(--terracota);font-weight:800;left:9px}
+
+  .pill-row{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+  .pill{background:var(--arena);color:var(--tinta-soft);border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:500;border:1px solid var(--linea)}
+  .pill b{color:var(--arcilla)}
+
+  a{color:var(--turquesa)}
+  a:hover{color:var(--terracota)}
+
+  .quote{font-family:'Cormorant Garamond',serif;font-size:25px;font-style:italic;color:var(--puna);text-align:center;max-width:760px;margin:44px auto;line-height:1.5;position:relative;padding:0 40px}
+  .quote::before,.quote::after{font-size:62px;color:var(--ocre);opacity:.4;position:absolute;font-family:'Cormorant Garamond',serif;line-height:1}
+  .quote::before{content:'“';left:0;top:-10px}
+  .quote::after{content:'”';right:0;bottom:-34px}
+
+  .tl{position:relative;margin:34px 0 0;padding-left:34px}
+  .tl::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--terracota),var(--ocre),var(--turquesa))}
+  .tl-item{position:relative;padding-bottom:26px}
+  .tl-item::before{content:'';position:absolute;left:-30px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ocre);border:2.5px solid var(--blanco);box-shadow:0 0 0 2px var(--ocre)}
+  .tl-item.urgent::before{background:var(--terracota);box-shadow:0 0 0 2px var(--terracota)}
+  .tl-when{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700;color:var(--terracota);margin-bottom:3px}
+  .tl-item h4{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--puna);font-weight:600;margin-bottom:3px}
+  .tl-item p{font-size:14px;color:var(--tinta-soft)}
+
+  footer{background:var(--puna);color:#cfd6da;padding:48px 0 40px;text-align:center}
+  footer .f-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;margin-bottom:10px;font-style:italic}
+  footer .f-meta{font-size:12.5px;color:#8fa0a9;margin-top:18px;line-height:1.8}
+  footer a{color:var(--ocre)}
+
+  @media(max-width:640px){
+    .hero h1{font-size:48px}
+    .section-title{font-size:32px}
+    .container{padding:0 18px}
+    .day-head{padding:16px 18px}
+    .day-body{padding:18px}
+    .hl{padding:26px 22px}
+    .quote{font-size:20px;padding:0 26px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  🎭 <strong>CARNAVAL GRANDE CONFIRMADO:</strong> 6, 7 y 8 de febrero de 2027 · Martes de Chaya 9 de febrero · Feriados nacionales lunes 8 y martes 9
+</div>
+
+<div class="hero">
+  <div class="container hero-content">
+    <span class="hero-eyebrow">La última de Rodri como hombre libre</span>
+    <h1>Salta &amp; <em>Jujuy</em></h1>
+    <p class="hero-tagline">Cinco días entre el talco de la Quebrada, el Torrontés de Cafayate y las peñas de Balcarce. Diez tipos, dos autos, una casa con pileta y el carnaval más grande de la Argentina cayendo justo encima.</p>
+    <div class="hero-dates">Viernes 5 <span>—</span> Miércoles 10 de febrero de 2027</div>
+    <div class="cd-grid" id="cd"></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#billete">El billete</a>
+    <a href="#plan">Día por día</a>
+    <a href="#mapa">Mapa</a>
+    <a href="#dormir">Dormir</a>
+    <a href="#ruedas">Ruedas</a>
+    <a href="#plata">Plata</a>
+    <a href="#reservas">Qué cerrar</a>
+    <a href="#manual">Manual de carnaval</a>
+    <a href="#agenda">Agenda</a>
+  </div>
+</nav>
+
+<!-- ============ EL BILLETE ============ -->
+<section id="billete">
+  <div class="container">
+    <span class="section-eyebrow">Lo primero, siempre</span>
+    <h2 class="section-title">El <em>billete</em></h2>
+    <p class="section-lead">Precios reales levantados de Google Flights el 17 de agosto de 2026, ida y vuelta por persona, en pesos. Salta (SLA) gana por goleada sobre Jujuy (JUJ): más frecuencias, más aerolíneas y hasta 60% más barato. Y apareció una cosa que cambia el viaje entero.</p>
+
+    <div class="hl win">
+      <span class="badge b-win">El hallazgo</span>
+      <h3>Volver el miércoles 10 en vez del martes 9 sale la mitad — y te regala un día</h3>
+      <p>El martes 9 es el día en que <strong>todo el país vuelve del finde largo</strong>. Los vuelos de la tarde de ese martes están a <strong>ARS 336.192</strong> el tramo. El mismo tramo el miércoles 10 a la noche está a <strong>ARS 157.631</strong>.</p>
+      <p><strong>Diferencia: ARS 178.561 por cabeza. Casi 1,8 millones para los diez.</strong> Y no es que pagás menos por menos: te llevás un día más, entero, que incluye el Martes de Chaya completo en la Quebrada.</p>
+      <p style="margin-top:14px;font-size:14px;color:var(--tinta-mute)">El único costo real es pedir el miércoles 10 en el laburo. Si alguno no puede, abajo está el Plan B con las fechas originales.</p>
+    </div>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Combinación</th><th>Ida</th><th>Vuelta</th><th class="num">ARS por persona</th><th class="num">Los 10</th></tr></thead>
+      <tbody>
+        <tr class="best">
+          <td><strong>PLAN A — recomendado</strong><br><span style="font-size:12.5px;color:var(--tinta-mute)">5 al 10 de febrero</span></td>
+          <td>Vie 5 · JetSMART<br>EZE 7:00 → SLA 9:14<br><span style="font-size:12px;color:var(--tinta-mute)">ARS 151.765</span></td>
+          <td>Mié 10 · Aerolíneas<br>SLA 21:20 → AEP 23:25<br><span style="font-size:12px;color:var(--tinta-mute)">ARS 157.631</span></td>
+          <td class="num"><strong>309.396</strong></td>
+          <td class="num"><strong>3.093.960</strong></td>
+        </tr>
+        <tr>
+          <td>Plan A low cost<br><span style="font-size:12.5px;color:var(--tinta-mute)">todo JetSMART</span></td>
+          <td>Vie 5 · JetSMART<br>EZE 7:00 → SLA 9:14</td>
+          <td>Mié 10 · JetSMART<br>SLA 10:33 → AEP 12:38</td>
+          <td class="num">303.530</td>
+          <td class="num">3.035.300</td>
+        </tr>
+        <tr>
+          <td><strong>PLAN B — fechas originales</strong><br><span style="font-size:12.5px;color:var(--tinta-mute)">5 al 9 de febrero</span></td>
+          <td>Vie 5 · JetSMART<br>EZE 7:00 → SLA 9:14</td>
+          <td>Mar 9 · Aerolíneas<br>SLA 13:00 → AEP 15:05</td>
+          <td class="num">422.382</td>
+          <td class="num">4.223.820</td>
+        </tr>
+        <tr>
+          <td>Plan B apretado<br><span style="font-size:12.5px;color:var(--tinta-mute)">hay que salir de la Quebrada 5 AM</span></td>
+          <td>Vie 5 · JetSMART<br>EZE 7:00 → SLA 9:14</td>
+          <td>Mar 9 · JetSMART<br>SLA 10:33 → AEP 12:38</td>
+          <td class="num">303.530</td>
+          <td class="num">3.035.300</td>
+        </tr>
+        <tr>
+          <td>Vía Jujuy (JUJ)<br><span style="font-size:12.5px;color:var(--tinta-mute)">descartado</span></td>
+          <td colspan="2">Único directo razonable: JetSMART AEP 12:35 → JUJ 14:55. El resto, Aerolíneas desde 817.861 o con escala en Córdoba de 8 horas.</td>
+          <td class="num">327.467</td>
+          <td class="num">3.274.670</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="grid g3">
+      <div class="card">
+        <div class="card-icon">🕖</div>
+        <div class="card-label">Por qué el de las 7</div>
+        <div class="card-value">Día 1 completo</div>
+        <p class="card-sub">Aterrizan 9:14 AM. Retiran autos, hacen el check-in y les queda el viernes entero. El otro JetSMART sale 21:05 de Aeroparque al mismo precio pero llegan a las 23:19 y pierden el día.</p>
+      </div>
+      <div class="card t2">
+        <div class="card-icon">🧳</div>
+        <div class="card-label">Letra chica</div>
+        <div class="card-value">Bodega aparte</div>
+        <p class="card-sub">JetSMART no incluye equipaje despachado. Aerolíneas sí (15 kg). Para 4 noches con mochila de mano alcanza. Si alguno despacha, sumale unos ARS 35–45.000 por tramo.</p>
+      </div>
+      <div class="card t3">
+        <div class="card-icon">📉</div>
+        <div class="card-label">Cuándo comprar</div>
+        <div class="card-value">Ahora</div>
+        <p class="card-sub">Google marca "precios normales" y avisa que la ventana barata son los 6 meses previos. Febrero 2027 está justo a 6 meses. Esperar a diciembre es apostar contra la casa en el finde más demandado del año.</p>
+      </div>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Regla del grupo</span>
+      <h3>Diez pasajes se compran de una, no de a poco</h3>
+      <p>Las low cost venden por cupos: cuando se agota el cupo barato, salta al siguiente escalón. Si compran de a dos, los últimos cuatro van a pagar el doble que los primeros. <strong>Una tarjeta, una compra, diez asientos, y después se arregla la plata entre ustedes.</strong></p>
+      <p>Y elijan asientos en el momento de comprar: en un vuelo lleno de carnaval, sin asignación previa quedan los diez desparramados.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DÍA POR DÍA ============ -->
+<section class="alt" id="plan">
+  <div class="container">
+    <span class="section-eyebrow">El plan</span>
+    <h2 class="section-title">Día por <em>día</em></h2>
+    <p class="section-lead">La lógica del itinerario resuelve una tensión geográfica: el carnaval está 2h30 al norte y el vino está 2h20 al sur, en direcciones opuestas. La solución es concentrar la Quebrada en un bloque corrido de tres días y dejar Cafayate para el final, cuando ya bajaron.</p>
+
+    <!-- VIERNES 5 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">05</div>
+        <div class="day-t">
+          <h3>Llegada, empanadas y Balcarce</h3>
+          <div class="day-sub">Viernes · Salta capital · 1.221 msnm</div>
+        </div>
+        <div class="day-sleep">🛏 Casa en Salta</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">7:00</div><div class="slot-txt">Despegue de <strong>Ezeiza</strong>. Estar 5:00 en el aeropuerto. Sí, es cruel. Compensa.</div></div>
+        <div class="slot"><div class="slot-time">9:14</div><div class="slot-txt">Aterrizan en <strong>Salta (SLA)</strong>. Retiran los dos autos en el mostrador del aeropuerto — reservados con meses de anticipación, no improvisando.</div></div>
+        <div class="slot"><div class="slot-time">10:30</div><div class="slot-txt">Check-in en la casa. <strong>San Lorenzo</strong> (10 km, más verde y fresco) o <strong>Salta centro</strong> (peñas caminando). Descargar, pileta, primera cerveza.</div></div>
+        <div class="slot"><div class="slot-time">13:00</div><div class="slot-txt">Bautismo de fuego: <strong>empanadas salteñas</strong>. Doña Salta (Córdoba 46, 0387 432-1921) o El Charrúa (Caseros 221). Locro, tamales, humita.</div></div>
+        <div class="slot"><div class="slot-time">16:00</div><div class="slot-txt">Tarde tranquila a propósito — están aclimatando antes de subir. <strong>Teleférico San Bernardo</strong> (ARS 25.000 i/v, último ascenso 19:00) o directamente pileta y asado en la casa.</div></div>
+        <div class="slot key"><div class="slot-time">21:30</div><div class="slot-txt"><strong>Peñas del Paseo Balcarce.</strong> La Panadería del Chuña (Balcarce 446, 0387 431-2896) es la más grande del país y la que mejor banca a diez tipos: podés bailar y subirte a cantar. Alternativa más auténtica: <strong>La Casona del Molino</strong> (Luis Burela 1 esq. Caseros), casa de 1671 sin escenario, los músicos tocan entre las mesas. Reservar sí o sí.</div></div>
+        <div class="slot"><div class="slot-time">03:00</div><div class="slot-txt">A dormir. Mañana se madruga y es el día más importante del viaje.</div></div>
+      </div>
+    </div>
+
+    <!-- SÁBADO 6 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">06</div>
+        <div class="day-t">
+          <h3>El Desentierro del Diablo</h3>
+          <div class="day-sub">Sábado · Quebrada de Humahuaca · el día que no se puede perder</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara o Maimará</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">7:00</div><div class="slot-txt">Sale la <strong>combi con chofer</strong> desde la casa. Hoy nadie maneja: van a tomar desde el mediodía y la RN 9 tiene controles de alcoholemia todo el carnaval. Los bolsos de las dos noches en la Quebrada, arriba.</div></div>
+        <div class="slot"><div class="slot-time">9:30</div><div class="slot-txt"><strong>Purmamarca</strong> (2.192 m). Café, el Cerro de los Siete Colores, comprar talco y bebida acá — adentro del carnaval se dispara todo.</div></div>
+        <div class="slot key"><div class="slot-time">11:30</div><div class="slot-txt"><strong>TILCARA · Desentierro fortinero en el Mojón del Matadero.</strong> Se desentierra al Pujllay: un muñeco de trapo que quedó enterrado bajo la apacheta desde el carnaval pasado. Se chaya el mojón con alcohol, coca y cigarrillos. Este momento es espiritual: se acompaña, no se interrumpe.</div></div>
+        <div class="slot"><div class="slot-time">14:00</div><div class="slot-txt">Bajan las demás comparsas de Tilcara a la calle. Acá arranca el descontrol de talco, harina, espuma y papel picado.</div></div>
+        <div class="slot key"><div class="slot-time">16:00</div><div class="slot-txt"><strong>UQUÍA · Bajada de los Diablos</strong> al pie del Cerro Blanco. La más famosa de la Quebrada. La ruta colapsa: salir de Tilcara 15:00 como tarde.</div></div>
+        <div class="slot key"><div class="slot-time">19:00</div><div class="slot-txt"><strong>HUMAHUACA · Topamiento de los Cholos</strong> (2.939 m). El cierre más convocante del día. Se arma en los mojones tradicionales y sigue hasta bien entrada la noche.</div></div>
+        <div class="slot"><div class="slot-time">22:00 →</div><div class="slot-txt"><strong>Fortines.</strong> Las comparsas se mudan a peñas que siguen hasta que sale el sol, más las "invitaciones" en casas de familia. Acá es donde se define si Rodri llega entero al casamiento.</div></div>
+      </div>
+    </div>
+
+    <!-- DOMINGO 7 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">07</div>
+        <div class="day-t">
+          <h3>Salinas Grandes y Domingo de Tentación</h3>
+          <div class="day-sub">Domingo · Cuesta de Lipán · hasta 4.170 msnm</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara o Maimará</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:30</div><div class="slot-txt">Arranque piadoso. Desayuno largo, agua, ibuprofeno. La resaca de altura y el apunamiento se confunden — si a alguien le duele la cabeza fuerte, no es solo la chicha.</div></div>
+        <div class="slot key"><div class="slot-time">10:30</div><div class="slot-txt"><strong>Cuesta de Lipán → Salinas Grandes.</strong> 65 km por la RN 52: de 2.192 m a 4.170 m en 17 km de curvas, y después el blanco absoluto a 3.450 m. Llamas, vicuñas y burros cruzando. <strong>Se maneja de mañana, sin excepción.</strong></div></div>
+        <div class="slot"><div class="slot-time">14:00</div><div class="slot-txt">Vuelta bajando la cuesta. Almuerzo en Purmamarca o Maimará.</div></div>
+        <div class="slot key"><div class="slot-time">16:30</div><div class="slot-txt"><strong>MAIMARÁ · Bajada del Cerro Negro.</strong> La comparsa baja el cerro y frena el tránsito de la RN 9. Después, comparsas por las calles de Tilcara toda la tarde.</div></div>
+        <div class="slot"><div class="slot-time">21:00</div><div class="slot-txt">Segunda noche de fortín, o cena tranquila si el sábado hizo estragos. Nadie va a juzgar.</div></div>
+      </div>
+    </div>
+
+    <!-- LUNES 8 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">08</div>
+        <div class="day-t">
+          <h3>Hornocal, Carnaval Grande y bajada</h3>
+          <div class="day-sub">Lunes · feriado nacional · Humahuaca → Salta</div>
+        </div>
+        <div class="day-sleep">🛏 Casa en Salta</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:00</div><div class="slot-txt">Check-out en la Quebrada. Bolsos a la combi.</div></div>
+        <div class="slot"><div class="slot-time">10:00</div><div class="slot-txt"><strong>Humahuaca.</strong> Misa en la Catedral con bendición de disfraces, topamiento de banderas en el atrio, invitación en la explanada del Monumento con saratoga y chicha. Sí, a las 11 de la mañana.</div></div>
+        <div class="slot key"><div class="slot-time">11:30</div><div class="slot-txt"><strong>Serranía del Hornocal</strong> — 25 km de ripio por la RP 73 hasta 4.350 m. El cerro de catorce colores. <span style="color:var(--arcilla)"><strong>Condicional:</strong> si llovió, se consulta en Humahuaca (turismo, estación de servicio o policía) antes de subir. Los últimos 3 km entra un solo auto.</span></div></div>
+        <div class="slot"><div class="slot-time">14:00</div><div class="slot-txt">Almuerzo en Humahuaca y última vuelta por las comparsas del Carnaval Grande.</div></div>
+        <div class="slot key"><div class="slot-time">15:30</div><div class="slot-txt"><strong>Bajada a Salta, de día.</strong> 239 km, 3 horas. No se maneja de noche por la RN 9: Vialidad tiene marcados los puntos negros en Huichaira (km 1.772) y Bordo Sococha (km 1.776), justo pasando Tilcara, y febrero es plena temporada de crecidas.</div></div>
+        <div class="slot"><div class="slot-time">19:00</div><div class="slot-txt">Llegada a la casa. Pileta, ducha eterna, sacarse el talco de las orejas.</div></div>
+        <div class="slot"><div class="slot-time">22:00</div><div class="slot-txt">Segunda ronda de peñas, o los <strong>Corsos de Salta</strong> en el corsódromo junto al Estadio Martearena (entrada general ~ARS 8.000). Ojo que en Salta se juega con agua.</div></div>
+      </div>
+    </div>
+
+    <!-- MARTES 9 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">09</div>
+        <div class="day-t">
+          <h3>Cafayate: el día del vino</h3>
+          <div class="day-sub">Martes de Chaya · feriado · Quebrada de las Conchas</div>
+        </div>
+        <div class="day-sleep">🛏 Casa en Salta</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">8:00</div><div class="slot-txt">Sale la combi con chofer. <strong>Hoy tampoco maneja nadie</strong>, por razones obvias. Salta tiene alcohol cero.</div></div>
+        <div class="slot"><div class="slot-time">9:00 →</div><div class="slot-txt"><strong>RN 68, Quebrada de las Conchas.</strong> 83 km de tramo escénico. Paradas: Garganta del Diablo, el Anfiteatro, Los Castillos, el mirador Tres Cruces, el puente de <em>Relatos Salvajes</em>.</div></div>
+        <div class="slot key"><div class="slot-time">12:00</div><div class="slot-txt"><strong>Bodega El Esteco.</strong> Selección Terroir 1700 msnm (4 vinos, ARS 30.000) o Selección de Extremos con los alta gama Altimus y Chañar Punco (ARS 40.000). Cupo online de 12: entran los diez. Reservas: turismo@elesteco.com.ar · +54 9 3868 414262.</div></div>
+        <div class="slot"><div class="slot-time">14:00</div><div class="slot-txt">Almuerzo en Cafayate. Alternativa fuerte para grupos: el <strong>asado bodeguero de El Porvenir</strong> o su clase de armado de empanadas, ambos pensados para grupos (visitas@elporvenirdecafayate.com · +54 9 387 4732557).</div></div>
+        <div class="slot"><div class="slot-time">16:30</div><div class="slot-txt">Segunda bodega o vueltas por la plaza. Chato's Wine Bar (San Martín 223) y el Amalaya Wine Bar (25 de Mayo 487) son los más despedida-friendly.</div></div>
+        <div class="slot"><div class="slot-time">18:00</div><div class="slot-txt">Vuelta a Salta antes de que caiga el sol. La RN 68 de noche, con curvas ciegas y derrumbes, no es lugar para una combi con diez tipos alegres.</div></div>
+        <div class="slot"><div class="slot-time">21:30</div><div class="slot-txt">Última noche. Cena en La Monumental o parrilla en la casa, y después Balcarce o Temple (Av. Belgrano 213, cierra 3 AM, reserva por WhatsApp +54 9 11 2623-9333).</div></div>
+      </div>
+    </div>
+
+    <!-- MIÉRCOLES 10 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">10</div>
+        <div class="day-t">
+          <h3>Cabra Corral y vuelta</h3>
+          <div class="day-sub">Miércoles de Ceniza · el día que ganaron</div>
+        </div>
+        <div class="day-sleep">✈️ Vuelo 21:20</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">10:00</div><div class="slot-txt">Check-out tarde si se puede negociar, o dejar los bolsos y salir.</div></div>
+        <div class="slot key"><div class="slot-time">11:30</div><div class="slot-txt"><strong>Dique Cabra Corral</strong> — 85 km por la RN 68 sur. Extreme Games abre los 365 días de 11 a 19 (0387 537-1186). Bungee de 40 m ARS 45.800 · tirolesa de 200 m ARS 28.800 · banano ARS 28.800 · <strong>pileta 2 horas ARS 5.000</strong> para los que estén hechos pelota. Pack Adrenalina completo ARS 114.800.</div></div>
+        <div class="slot"><div class="slot-time">15:00</div><div class="slot-txt">Almuerzo tardío y última cerveza mirando el dique.</div></div>
+        <div class="slot"><div class="slot-time">17:30</div><div class="slot-txt">Salida hacia el aeropuerto. Devolución de autos.</div></div>
+        <div class="slot"><div class="slot-time">21:20</div><div class="slot-txt"><strong>SLA → Aeroparque.</strong> Llegada 23:25. Rodri vuelve con talco en lugares donde no debería haber talco.</div></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-mute">Plan B</span>
+      <h3>Si tienen que volver el martes 9</h3>
+      <p>Se sacrifica Cafayate entero. El lunes 8 bajan de la Quebrada, hacen la última noche de peñas en Salta, y el martes 9 vuelan a las 13:00 (ARS 270.617 el tramo) con la mañana libre para el Mercado San Miguel y comprar vino para llevar.</p>
+      <p>El vino se puede recuperar sin ir a Cafayate: <strong>El Esteco, Amalaya y El Porvenir tienen wine bars y vinotecas en Salta capital</strong>. No es lo mismo que estar entre los viñedos, pero se salva. <strong>Costo del Plan B: ARS 112.986 más por cabeza y un día menos.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAPA ============ -->
+<section id="mapa">
+  <div class="container">
+    <span class="section-eyebrow">La geografía</span>
+    <h2 class="section-title">Dónde queda <em>qué</em></h2>
+    <p class="section-lead">Salta capital es el centro de gravedad. La Quebrada arranca 2h30 al norte y Cafayate está 2h20 al sur. Todo lo demás cuelga de esos dos ejes.</p>
+    <div id="map"></div>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Tramo</th><th class="num">Km</th><th class="num">Tiempo</th><th>Ruta y nota</th></tr></thead>
+      <tbody>
+        <tr><td>Salta → Purmamarca</td><td class="num">179</td><td class="num">2h14</td><td>RN 9 + RN 52</td></tr>
+        <tr><td>Salta → Tilcara</td><td class="num">197</td><td class="num">2h27</td><td>RN 9 · puntos negros en Huichaira y Bordo Sococha</td></tr>
+        <tr><td>Salta → Humahuaca</td><td class="num">239</td><td class="num">2h59</td><td>RN 9</td></tr>
+        <tr><td>Purmamarca → Salinas Grandes</td><td class="num">65</td><td class="num">1h30</td><td>RN 52, Cuesta de Lipán · asfalto bueno, pura curva, sube a 4.170 m</td></tr>
+        <tr><td>Humahuaca → Hornocal</td><td class="num">25</td><td class="num">45 min</td><td>RP 73 · <strong>todo ripio</strong>, últimos 3 km de una sola mano</td></tr>
+        <tr><td>Salta → Cafayate</td><td class="num">186</td><td class="num">2h22</td><td>RN 68 · sinuosa, poca señalización, derrumbes frecuentes</td></tr>
+        <tr><td>Salta → Cabra Corral</td><td class="num">85</td><td class="num">1h15</td><td>RN 68 sur + RP 47 · queda de paso volviendo de Cafayate</td></tr>
+        <tr><td>Salta → San Lorenzo</td><td class="num">10</td><td class="num">20 min</td><td>Zona de casas quinta con pileta</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:13px;color:var(--tinta-mute);margin-top:-8px">Ninguno de estos tramos tiene peaje. Nafta estimada Salta ↔ Cafayate ida: ARS ~43.000 por auto.</p>
+  </div>
+</section>
+
+<!-- ============ DORMIR ============ -->
+<section class="alt" id="dormir">
+  <div class="container">
+    <span class="section-eyebrow">La cama</span>
+    <h2 class="section-title">Dónde <em>dormir</em></h2>
+    <p class="section-lead">Acá está el cuello de botella real del viaje, y no es el vuelo.</p>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Urgente</span>
+      <h3>Jujuy tiene 13.732 plazas para 45.000 visitantes</h3>
+      <p>En el Carnaval 2026 la ocupación fue de <strong>98,9% en Tilcara y 98,2% en Purmamarca</strong>, con la provincia entera prácticamente llena y el gobierno habilitando casas de familia para ampliar capacidad. Conseguir diez camas juntas en la Quebrada para el finde del desentierro es de lo más difícil que existe en el turismo argentino.</p>
+      <p><strong>Esto se reserva ahora, en agosto, no en diciembre.</strong> Y ojo con las estafas: en febrero de 2026 hubo denuncias de alquileres falsos en Humahuaca donde el estafador usaba videos reales de las propiedades, presionaba con "congelar la reserva ante la alta demanda del desentierro" y después bloqueaba. Un grupo de diez buscando casa grande con urgencia es el target perfecto. <strong>Solo Booking o Airbnb con protección, o web propia con factura. Cero transferencias a alias de Instagram.</strong></p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <div class="card-label">Base · 5 noches</div>
+        <div class="card-value">Casa en Salta</div>
+        <p class="card-sub">Se alquila del viernes 5 al miércoles 10 aunque el sábado y domingo duerman arriba: quedan los bolsos, la pileta del último día y no hay que hacer dos check-ins. Salta capital tuvo 76% de ocupación en carnaval — mucho más manejable que Jujuy.</p>
+        <div class="pill-row">
+          <span class="pill"><b>San Lorenzo</b> 10 km, verde, casas quinta</span>
+          <span class="pill"><b>Centro</b> peñas caminando</span>
+          <span class="pill"><b>Vaqueros</b> 8 km, sobre la RN 9</span>
+          <span class="pill"><b>Cerrillos</b> 15 km, sobre la RN 68</span>
+        </div>
+        <p class="card-sub" style="margin-top:12px"><strong>Precios base verificados</strong> (tarifa normal, no carnaval): casas de 10-14 plazas con pileta y quincho entre ARS 139.000 y 250.000 por día. Con recargo de carnaval, estimar <strong>ARS 220.000–400.000 la noche</strong> — o sea USD 14 a 26 por cabeza por noche.</p>
+      </div>
+
+      <div class="card t2">
+        <div class="card-icon">⛰️</div>
+        <div class="card-label">Quebrada · 2 noches</div>
+        <div class="card-value">Tilcara o Maimará</div>
+        <p class="card-sub">El sábado 6 y el domingo 7. Dormir arriba es lo que separa "vimos el carnaval" de "estuvimos en el carnaval": los fortines siguen hasta el amanecer y bajar a las 3 AM por la RN 9 no es una opción.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Referencias reales:</strong> Antigua Tilcara Guesthouse publica temporada alta con cuádruple a ARS 178.600 y cama de hostel a ARS 35.000 — y aclara textualmente que carnaval tiene tarifario aparte. En Humahuaca, un relevamiento de enero 2026 encontró Airbnb enteros a USD 740 la estadía y hostales desde USD 366.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Si no consiguen:</strong> Maimará, Volcán o Tumbaya (más baratos, más cerca). Última alternativa, San Salvador de Jujuy — se llena igual pero tiene muchísimas más plazas absolutas y queda a 1h01 de Tilcara. Nunca volver a dormir a Salta: son 5 horas de ida y vuelta.</p>
+      </div>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Detalle que arruina viajes</span>
+      <h3>Avisen que son diez tipos en una despedida</h3>
+      <p>Varios avisos de casas en Salta dicen explícitamente <strong>"no fiestas ni eventos"</strong>. Si reservan sin declarar el grupo, los rebotan en el check-in con las valijas en la vereda y sin reembolso. Declararlo de entrada filtra propiedades pero garantiza que no haya sorpresas — y hay dueños que directamente buscan este perfil.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RUEDAS ============ -->
+<section id="ruedas">
+  <div class="container">
+    <span class="section-eyebrow">Moverse</span>
+    <h2 class="section-title">Las <em>ruedas</em></h2>
+    <p class="section-lead">Con diez personas hay una decisión estructural y una regla innegociable.</p>
+
+    <div class="grid g2">
+      <div class="card t3">
+        <div class="card-icon">🚙</div>
+        <div class="card-label">La decisión</div>
+        <div class="card-value">Dos autos, no una van</div>
+        <p class="card-sub">El mercado de alquiler en Salta <strong>corta en 10 plazas</strong>: la Mercedes V-Class de Street Rent a Car, ARS 254.520 por día. Las combis de 12 a 19 asientos aparecen casi siempre <em>con chofer</em>, porque manejar transporte de pasajeros requiere licencia profesional clase D que ninguno de ustedes tiene.</p>
+        <p class="card-sub" style="margin-top:10px">Dos vehículos de 7 plazas (Chevrolet Spin en Hertz, ARS 126.879/día) además dan redundancia si uno falla en el ripio del Hornocal, y flexibilidad para que el grupo se parta.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Requisito que traba reservas:</strong> tarjeta de crédito internacional del conductor con margen suficiente para bloquear la franquicia completa. Sin margen, no entregan el auto. Y varias agencias piden 25 años mínimo.</p>
+      </div>
+
+      <div class="card t4">
+        <div class="card-icon">🚐</div>
+        <div class="card-label">La regla</div>
+        <div class="card-value">Chofer los días de tomar</div>
+        <p class="card-sub"><strong>Salta y Jujuy tienen alcohol cero</strong> — cualquier graduación es multa — y durante el carnaval hay operativo reforzado de controles vehiculares y alcoholemia en rutas y accesos.</p>
+        <p class="card-sub" style="margin-top:10px">Combi con chofer contratada para <strong>el bloque de la Quebrada (sáb 6 al lun 8)</strong> y para <strong>el día de Cafayate (mar 9)</strong>. Nadie tiene que hacer de conductor designado y nadie maneja la RN 9 después de un fortín.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Contactos:</strong> saltaguia.com.ar tiene combis de 15 y 19 asientos con papeles CNRT (+54 9 387 683-9447, <em>piden reserva con 30 días</em>) · Willka Turismo (+54 9 387 629-6503) · Esencial Turismo, agencia habilitada EVT 15.635 (+54 9 387 683-8396).</p>
+      </div>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Rutas · febrero</span>
+      <h3>Se maneja de mañana. Punto.</h3>
+      <ul class="clean warn">
+        <li><strong>Nunca de noche por la RN 9.</strong> La policía provincial de Jujuy lo pide explícitamente. Puntos negros de Vialidad: arroyo Huichaira km 1.772, Bordo Sococha km 1.776, Quebrada de Hornillos km 1.760. Hay antecedentes de corte total por crecidas del Río Grande.</li>
+        <li><strong>La RN 68 a Cafayate es la más cortada de todas.</strong> Cortes documentados en enero/febrero de 2023, 2024, 2025 y 2026, con gente durmiendo en el auto. Curvas cerradas, puentes angostos, poca señalización.</li>
+        <li><strong>Las crecidas son de tarde-noche</strong>, entre las 15 y las 3 AM, y duran de 2 a 6 horas. Febrero es el segundo mes más lluvioso en Salta (147 mm, 11 días de lluvia) y el más lluvioso en Jujuy (188 mm).</li>
+        <li><strong>El Hornocal se consulta antes de subir.</strong> Con lluvia el ripio de la RP 73 queda intransitable. Preguntar en Humahuaca: turismo, estación de servicio o policía.</li>
+        <li><strong>Los dos autos van siempre juntos.</strong> No hay señal en varios tramos.</li>
+      </ul>
+      <div class="pill-row" style="margin-top:16px">
+        <span class="pill"><b>Emergencias en ruta</b> 140</span>
+        <span class="pill"><b>Vialidad Salta</b> 0387 431-0994</span>
+        <span class="pill"><b>Vialidad Jujuy</b> 388 422-1281</span>
+        <span class="pill"><b>Defensa Civil Jujuy</b> 103</span>
+        <span class="pill"><b>Turismo Salta</b> +54 9 3875 921004</span>
+      </div>
+      <p style="font-size:13.5px;margin-top:14px;color:var(--tinta-soft)">Estado de rutas en vivo: <a href="https://www.vialidadsalta.gob.ar/estados-de-rutas.php">vialidadsalta.gob.ar</a> · <a href="https://www.argentina.gob.ar/transporte/vialidad-nacional/estado-de-rutas">Vialidad Nacional</a> · alertas <a href="https://www.smn.gob.ar/alertas">smn.gob.ar</a>. <strong>La web de Vialidad Jujuy está congelada desde enero de 2024, no la usen.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLATA ============ -->
+<section class="alt" id="plata">
+  <div class="container">
+    <span class="section-eyebrow">La plata</span>
+    <h2 class="section-title">Cuánto sale <em>esto</em></h2>
+    <p class="section-lead">Dos columnas honestas. Precios de agosto de 2026 — en febrero de 2027 los números en pesos van a ser más altos por inflación, así que <strong>la referencia estable es el dólar</strong> (usado a ARS 1.545).</p>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Rubro</th><th class="num">Modo austero</th><th class="num">Modo cómodo</th><th>Qué cambia entre uno y otro</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Vuelo</strong> ida y vuelta</td>
+          <td class="num">303.530</td>
+          <td class="num">309.396</td>
+          <td>JetSMART los dos tramos vs. vuelta con Aerolíneas a las 21:20 (día entero ganado + equipaje incluido)</td>
+        </tr>
+        <tr>
+          <td><strong>Casa en Salta</strong> 5 noches</td>
+          <td class="num">100.000</td>
+          <td class="num">150.000</td>
+          <td>Casa de ARS 200.000/noche vs. una de 300.000 con mejor pileta y quincho</td>
+        </tr>
+        <tr>
+          <td><strong>Quebrada</strong> 2 noches</td>
+          <td class="num">80.000</td>
+          <td class="num">110.000</td>
+          <td>Hostel o casa de familia vs. cabaña/hostería en Tilcara</td>
+        </tr>
+        <tr>
+          <td><strong>Transporte</strong> 6 días</td>
+          <td class="num">172.000</td>
+          <td class="num">237.000</td>
+          <td>Dos autos manejando ustedes vs. autos + combi con chofer los 4 días de tomar</td>
+        </tr>
+        <tr>
+          <td><strong>Comida y bebida</strong></td>
+          <td class="num">240.000</td>
+          <td class="num">330.000</td>
+          <td>Asado en la casa y mercado vs. restaurantes y peña con cena todas las noches</td>
+        </tr>
+        <tr>
+          <td><strong>Actividades</strong></td>
+          <td class="num">115.000</td>
+          <td class="num">240.000</td>
+          <td>Peña + una bodega vs. + Cabra Corral, teleférico, segunda bodega, almuerzo maridado</td>
+        </tr>
+        <tr class="total">
+          <td>TOTAL POR PERSONA</td>
+          <td class="num">≈ 1.010.000<br><span style="font-weight:400;font-size:12.5px">USD 655</span></td>
+          <td class="num">≈ 1.376.000<br><span style="font-weight:400;font-size:12.5px">USD 890</span></td>
+          <td>Los diez: ARS 10,1 M vs. 13,8 M</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-info">Veredicto</span>
+      <h3>El millón se llega, pero justo</h3>
+      <p>El objetivo de <strong>ARS 1M todo incluido es alcanzable</strong> en modo austero: casa buena pero no top, hostel en la Quebrada, manejando ustedes salvo el sábado, y con asado en la casa la mitad de las noches. El modo cómodo se va a ARS 1,38 M — un 36% más — y lo que compra es básicamente <strong>no manejar y no cocinar</strong>.</p>
+      <p style="margin-top:12px">Mi recomendación es un punto intermedio: <strong>ir austero en comida y alojamiento, y gastar en el chofer</strong>. En un viaje donde cuatro de los cinco días implican tomar desde el mediodía, en provincias con alcohol cero, sobre rutas de montaña con crecidas, el chofer no es un lujo. Es la línea entre una despedida y un problema.</p>
+    </div>
+
+    <div class="grid g4">
+      <div class="card">
+        <div class="card-label">Ahorro Plan A vs B</div>
+        <div class="card-value">1.129.860</div>
+        <p class="card-sub">Pesos que el grupo se ahorra volviendo el miércoles 10 — y encima con un día más de viaje.</p>
+      </div>
+      <div class="card t2">
+        <div class="card-label">Efectivo obligatorio</div>
+        <div class="card-value">En mano</div>
+        <p class="card-sub">En la Quebrada casi no hay cajeros y la señal se cae por saturación durante el carnaval. Suban con plata física para los tres días.</p>
+      </div>
+      <div class="card t3">
+        <div class="card-label">Descuento fácil</div>
+        <div class="card-value">20% OFF</div>
+        <p class="card-sub">Salta Rafting bonifica 20% pagando en efectivo, y tiene promo de cumpleaños donde el agasajado no paga. Vale preguntar si la estiran a despedidas.</p>
+      </div>
+      <div class="card t4">
+        <div class="card-label">Costo oculto</div>
+        <div class="card-value">Estacionar</div>
+        <p class="card-sub">Hay denuncias de ARS 3.000 por 20 minutos en Tilcara durante el carnaval. Otra razón para ir con chofer que los deje y siga.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESERVAS ============ -->
+<section id="reservas">
+  <div class="container">
+    <span class="section-eyebrow">Acción</span>
+    <h2 class="section-title">Qué hay que <em>cerrar</em> y cuándo</h2>
+    <p class="section-lead">Estamos a casi seis meses del viaje. Suena lejos y no lo es: dos de estas cosas ya están tarde.</p>
+
+    <div class="tl">
+      <div class="tl-item urgent">
+        <div class="tl-when">Ahora · agosto 2026</div>
+        <h4>Alojamiento en la Quebrada</h4>
+        <p>Lo más difícil de todo el viaje. Diez camas en Tilcara o Maimará para el finde del desentierro, con 98% de ocupación histórica. Solo por Booking/Airbnb o web propia con factura.</p>
+      </div>
+      <div class="tl-item urgent">
+        <div class="tl-when">Ahora · agosto 2026</div>
+        <h4>Los diez pasajes, de una sola compra</h4>
+        <p>Google marca precios normales y la ventana barata son los 6 meses previos. Ida JetSMART EZE 7:00 del viernes 5 + vuelta Aerolíneas SLA 21:20 del miércoles 10. Con asientos elegidos.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Agosto — septiembre</div>
+        <h4>Casa en Salta</h4>
+        <p>Declarando que son diez en una despedida. San Lorenzo se llena antes que la capital.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Octubre — noviembre</div>
+        <h4>Autos y combi con chofer</h4>
+        <p>KAYAK marca el mejor precio de alquiler a ~75 días del viaje, o sea fines de noviembre. Las combis de saltaguia piden confirmación con 30 días. Confirmar con la rentadora el requisito de licencia y el margen de tarjeta.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Principios de noviembre</div>
+        <h4>Bodega El Esteco</h4>
+        <p>Su sistema de reservas abre exactamente 90 días antes. Para el martes 9 de febrero, la ventana se abre alrededor del 11 de noviembre. Poner alarma.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Diciembre — enero</div>
+        <h4>Peñas, Cabra Corral y extras</h4>
+        <p>La Casona del Molino y La Panadería del Chuña con semanas de anticipación para grupo de diez. Extreme Games no necesita reserva pero conviene avisar. Las fechas de los corsos de Salta se publican en enero.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Última semana</div>
+        <h4>Compras y chequeo de rutas</h4>
+        <p>Talco, espuma, antiparras, fundas estancas y protector 50+ se compran en Buenos Aires o en Salta, nunca adentro del carnaval. Y revisar el estado de rutas los días previos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANUAL ============ -->
+<section class="alt" id="manual">
+  <div class="container">
+    <span class="section-eyebrow">Lo que nadie te cuenta</span>
+    <h2 class="section-title">Manual de <em>carnaval</em></h2>
+    <p class="section-lead">El carnaval de la Quebrada no es un desfile que se mira. Es una fiesta ritual en la que te van a meter adentro, y tiene códigos.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-icon">😈</div>
+        <div class="card-label">Qué es realmente</div>
+        <div class="card-value">El Pujllay</div>
+        <p class="card-sub">Se desentierra de una apacheta a un muñeco de trapo que quedó enterrado al final del carnaval anterior. <em>Pujllay</em> es "jugar" en quechua — no es el diablo católico, aunque le digan así. El <strong>mojón</strong> es ese montículo de piedras y ofrendas; cada comparsa tiene el suyo en la ladera. "Chayar el mojón" es rociarlo con alcohol, coca y cigarrillos.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>El momento del mojón es espiritual.</strong> Se acompaña en silencio, no se interrumpe y no se usa de set de fotos. Todo lo demás es descontrol.</p>
+      </div>
+
+      <div class="card t2">
+        <div class="card-icon">🎊</div>
+        <div class="card-label">Cómo se entra</div>
+        <div class="card-value">Te meten solos</div>
+        <p class="card-sub">Las comparsas de Tilcara son abiertas: la ficha oficial de patrimonio inmaterial de Los Caprichosos dice textual que reciben a cualquiera aunque no sea del lugar. Acompañar la comparsa por la calle es gratis y nadie te va a dejar afuera — te van a convidar talco, serpentina y chicha.</p>
+        <p class="card-sub" style="margin-top:10px">Distinto es <strong>bajar el cerro disfrazado de diablo</strong>: eso es ser miembro, tener traje y relación previa. Si eso les interesa, hay que escribirle a la comparsa por Instagram con meses de anticipación, no aparecerse el sábado a las tres de la tarde.</p>
+      </div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card t3">
+        <div class="card-icon">🎒</div>
+        <div class="card-label">Qué llevar</div>
+        <div class="card-value">Ropa para tirar</div>
+        <ul class="clean" style="margin-top:6px">
+          <li><strong>Muda completa en el auto.</strong> Van a volver empapados de espuma, harina y pintura</li>
+          <li><strong>Funda estanca o ziploc</strong> para celular y documentos. Se pierden celulares todos los años</li>
+          <li><strong>Zapatillas cerradas.</strong> Nada de ojotas en el barro y el empujón</li>
+          <li><strong>Antiparras</strong> contra la espuma, y anteojos de sol baratos y sacrificables</li>
+          <li><strong>Abrigo para la noche.</strong> Humahuaca hace 28° a las 15 y 6° a las 6 AM</li>
+          <li>Rompevientos impermeable o piloto descartable — con viento el paraguas no sirve</li>
+          <li>Talco, espuma y bebida <strong>comprados antes</strong>: adentro se dispara todo</li>
+        </ul>
+      </div>
+
+      <div class="card t4">
+        <div class="card-icon">☀️</div>
+        <div class="card-label">El riesgo subestimado</div>
+        <div class="card-value">El sol</div>
+        <p class="card-sub">Mediciones con radiómetro de la UNSa en la Puna dan <strong>índice UV promedio 16 al mediodía en febrero, con picos de 19,5</strong>. La escala oficial considera "extremo" a partir de 11. Con esos valores, una piel clara se quema en tres o cuatro minutos. Y con cielo semi-nublado el índice sigue en 14: las nubes no salvan.</p>
+        <p class="card-sub" style="margin-top:10px">En Salinas Grandes el reflejo de la sal duplica la exposición. <strong>Protector 50+ reaplicado cada dos horas, labial con FPS, gorro con ala y anteojos con filtro UV real</strong> — la queratitis por sol de altura es una noche entera con los ojos ardiendo.</p>
+      </div>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Altura</span>
+      <h3>El apunamiento se disfraza de resaca</h3>
+      <p>Alrededor del <strong>25% de las personas que suben a 2.500 m</strong> tiene mal de altura, y el porcentaje sube a 40% a los 4.300 m. Los síntomas aparecen entre 6 y 10 horas después y duran uno o dos días: dolor de cabeza, náuseas, falta de apetito, cansancio. El manual MSD lo dice literalmente: <em>los síntomas se pueden confundir con una resaca</em>. En este viaje eso es un problema real de diagnóstico.</p>
+      <div class="pill-row" style="margin-top:14px">
+        <span class="pill">Salta <b>1.221 m</b></span>
+        <span class="pill">Purmamarca <b>2.192 m</b></span>
+        <span class="pill">Tilcara <b>2.465 m</b></span>
+        <span class="pill">Humahuaca <b>2.939 m</b></span>
+        <span class="pill">Salinas Grandes <b>3.450 m</b></span>
+        <span class="pill">Abra de Potrerillos <b>4.170 m</b></span>
+        <span class="pill">Hornocal <b>4.350 m</b></span>
+      </div>
+      <ul class="clean warn" style="margin-top:14px">
+        <li><strong>Lo que importa es la altura a la que dormís</strong>, no la máxima del día. Por eso el plan duerme en Tilcara (2.465 m) y no en Humahuaca (2.939 m), y hace Salinas y Hornocal de día bajando a dormir.</li>
+        <li><strong>El CDC recomienda evitar alcohol las primeras 48 horas en altura</strong>, y sobre todo antes de dormir: el alcohol deprime la respiración y la falta de oxígeno es peor durmiendo. Sé que este consejo va a ser ignorado. Pero que lo sepan.</li>
+        <li><strong>Estar en forma no protege.</strong> No hay correlación entre estado físico y mal de altura.</li>
+        <li>Botiquín: ibuprofeno, paracetamol, sales de rehidratación, hoja o té de coca. Bajar 300 a 1.000 metros resuelve casi todo.</li>
+        <li>Si alguno tiene asma mal controlada, apnea severa, hipertensión descontrolada o un evento cardíaco reciente, que hable con su médico antes. En serio.</li>
+        <li><strong>La chicha es artesanal y de graduación imprevisible</strong>, y en altura pega distinto. Aceptarla cuando te la convidan es parte del código; tomarla como cerveza no.</li>
+      </ul>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Regla de oro</span>
+      <h3>La única prohibición explícita</h3>
+      <p>Se juega con talco, harina, serpentina, papel picado, espuma y albahaca — la albahaca se reparte, no se tira. Pero <strong>en algunos pueblos está prohibido jugar con pintura y eso se respeta siempre</strong>. En Tilcara se usa; en otros no. Preguntar antes de sacar el aerosol.</p>
+      <p style="margin-top:10px">Y entre ustedes: con diez tipos tomando desde las 11 de la mañana a 2.900 metros durante tres días, <strong>tengan armado quién cuida a quién</strong>. Un par de duplas fijas, celulares cargados y un punto de encuentro por si se corta la señal — que se va a cortar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AGENDA ============ -->
+<section id="agenda">
+  <div class="container">
+    <span class="section-eyebrow">La libreta</span>
+    <h2 class="section-title">Agenda de <em>contactos</em></h2>
+    <p class="section-lead">Todo verificado en agosto de 2026. Los precios sin fecha son de referencia y hay que reconfirmarlos.</p>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Qué</th><th>Dónde</th><th>Contacto</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td colspan="4" style="background:var(--arena);font-weight:700;color:var(--arcilla);font-size:12px;letter-spacing:1.2px;text-transform:uppercase">Peñas y noche en Salta</td></tr>
+        <tr><td><strong>La Panadería del Chuña</strong></td><td>Balcarce 446</td><td>0387 431-2896</td><td>"La peña más grande del país". Show 21:30 a 03:00, se puede bailar y subir a cantar. La mejor para diez</td></tr>
+        <tr><td><strong>La Casona del Molino</strong></td><td>Luis Burela 1 esq. Caseros</td><td>0387 434-2835</td><td>Casa de 1671, sin escenario, músicos entre las mesas. Mar a dom 21:00–04:00. Reserva obligatoria</td></tr>
+        <tr><td>Peña del Chaqueño Palavecino</td><td>Balcarce 935</td><td>0387 403-0735</td><td>La única con precios públicos: derecho de show ARS 4.000 + mesa 2.000. Cazuela de cabrito 25.000, parrillada para 4 ARS 60.000</td></tr>
+        <tr><td>La Vieja Estación</td><td>Balcarce 875</td><td>+54 9 387 523-4888</td><td>Dos grupos folklóricos + ballet. Acepta grupos con 48 h. ~ARS 40–50.000 p/p</td></tr>
+        <tr><td>Boliche Balderrama</td><td>Av. San Martín 1126</td><td>+54 9 387 595-5830</td><td>La primera peña de la ciudad, más de 50 años</td></tr>
+        <tr><td>Temple Salta</td><td>Av. Belgrano 213</td><td>+54 9 11 2623-9333</td><td>After hasta las 3 AM. Reservar mesa para diez</td></tr>
+        <tr><td>El Charrúa <span style="color:var(--tinta-mute)">· parrilla</span></td><td>Caseros 221</td><td>+54 387 432-1859</td><td>Abre hasta las 06:00. El post-peña</td></tr>
+        <tr><td>Doña Salta <span style="color:var(--tinta-mute)">· regional</span></td><td>Córdoba 46</td><td>0387 432-1921</td><td>Empanadas, locro, tamales</td></tr>
+
+        <tr><td colspan="4" style="background:var(--arena);font-weight:700;color:var(--arcilla);font-size:12px;letter-spacing:1.2px;text-transform:uppercase">Bodegas de Cafayate</td></tr>
+        <tr><td><strong>El Esteco</strong></td><td>RN 40 y RN 68</td><td>+54 9 3868 414262<br>turismo@elesteco.com.ar</td><td>Terroir ARS 30.000 · Extremos 40.000 · <strong>Noches Mágicas 60.000</strong> (19–21 h, fogón con empanadas). Cupo online 12. Reservas abren 90 días antes</td></tr>
+        <tr><td><strong>El Porvenir</strong></td><td>Córdoba 32</td><td>+54 9 387 473-2557<br>visitas@elporvenirdecafayate.com</td><td>Visita ARS 12.000. Tiene <strong>asado bodeguero y clase de empanadas pensados para grupos</strong>. Cerrado los lunes</td></tr>
+        <tr><td>Piattelli</td><td>Cafayate</td><td>reservas@piattelli.com.ar</td><td>Degustación de 7 vinos ~ARS 56.000. Restaurante para 170, reserva obligatoria</td></tr>
+        <tr><td>Domingo Hermanos</td><td>Cafayate</td><td>+54 9 3868 46-9800</td><td>Todos los días 10–17. Visita + degustación con quesos. Avisar antes</td></tr>
+        <tr><td>San Pedro de Yacochuya</td><td>Cafayate</td><td>turismo@yacochuya.com.ar</td><td>Visitas <strong>sin cargo</strong> con reserva. Domingo cerrado, feriados a consultar</td></tr>
+        <tr><td>Amalaya Wine Bar</td><td>25 de Mayo 487</td><td>+54 9 387 313-3859</td><td>La bodega no se visita, el wine bar sí</td></tr>
+
+        <tr><td colspan="4" style="background:var(--arena);font-weight:700;color:var(--arcilla);font-size:12px;letter-spacing:1.2px;text-transform:uppercase">Adrenalina y aventura</td></tr>
+        <tr><td><strong>Extreme Games</strong></td><td>Dique Cabra Corral</td><td>0387 537-1186</td><td>Abierto 365 días, 11–19. Bungee 40 m ARS 45.800 · tirolesa 28.800 · banano 28.800 · pileta 2 h 5.000 · Pack Adrenalina 114.800. Peso bungee 40–110 kg</td></tr>
+        <tr><td><strong>Salta Rafting</strong></td><td>RN 47 km 34, Cnel. Moldes</td><td>+54 9 387 402-2876</td><td>Río Juramento, 10 rápidos clase III. 8 por balsa → dos balsas. <strong>20% OFF en efectivo.</strong> No se suspende por lluvia: el caudal lo maneja el dique</td></tr>
+        <tr><td>Finca Sayta</td><td>Chicoana</td><td>vía dexotic.com</td><td>Cabalgata full day con asado y vino ARS 130.000 p/p. Medio día 99.000</td></tr>
+        <tr><td>San Lorenzo Aventura</td><td>J.C. Dávalos 960</td><td>387 15-685-3762</td><td>Cuatriciclos. Máximo 8 por salida → dos tandas</td></tr>
+        <tr><td>Escape Games Salta</td><td>Av. del Bicentenario 753</td><td>+54 9 3872 26-2671</td><td>Tiene una sala llamada <strong>"Qué pasó ayer"</strong>. 2–6 jugadores, dos equipos de cinco en simultáneo</td></tr>
+        <tr><td>Zona de Guerra <span style="color:var(--tinta-mute)">· paintball</span></td><td>P. Cornejo s/n</td><td>387 406-0077</td><td>Nunca mezclan grupos. Partidas de hasta 3 h, trajes incluidos</td></tr>
+        <tr><td>Teleférico San Bernardo</td><td>Salta capital</td><td>+54 387 431-0641</td><td>ARS 25.000 ida y vuelta. Último ascenso 19:00, sin reserva</td></tr>
+
+        <tr><td colspan="4" style="background:var(--arena);font-weight:700;color:var(--arcilla);font-size:12px;letter-spacing:1.2px;text-transform:uppercase">Transporte</td></tr>
+        <tr><td>Combis con chofer</td><td>saltaguia.com.ar</td><td>+54 9 387 683-9447</td><td>15 y 19 asientos con papeles CNRT. <strong>Piden reserva con 30 días</strong></td></tr>
+        <tr><td>Esencial Turismo <span style="color:var(--tinta-mute)">· EVT 15.635</span></td><td>Salta</td><td>+54 9 387 683-8396</td><td>Minivan hasta 19 o minibús hasta 22. Sección de grupos</td></tr>
+        <tr><td>Willka Turismo</td><td>Av. H. Yrigoyen 215</td><td>+54 9 387 629-6503</td><td>Combis 15 y 19 con chofer y guía</td></tr>
+        <tr><td>Turismo La Quebrada</td><td>Buenos Aires 39</td><td>+54 9 387 227-3942</td><td>El único con tarifario público: Cafayate full day ARS 50.000 · Humahuaca + Hornocal 96.000 · Salinas Grandes 57.000</td></tr>
+        <tr><td>Alquiler de autos</td><td>Aeropuerto Güemes</td><td>Hertz, Alamo, Avis, Localiza, Europcar</td><td>Chevrolet Spin 7 plazas ~ARS 126.879/día. Mejor precio reservando a ~75 días</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="quote">
+      El carnaval de la Quebrada no se mira desde la vereda. A los diez minutos tenés talco en el pelo, una copa de chicha en la mano y una señora de ochenta años explicándote por qué tu comparsa es mejor que la del pueblo de al lado.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="f-title">Despedida de Rodri</div>
+    <p style="font-size:15px;color:#b6c2c8">Salta &amp; Jujuy · 5 al 10 de febrero de 2027</p>
+    <p class="f-meta">
+      Versión 1.0 · armada el 17 de agosto de 2026<br>
+      Fechas de carnaval confirmadas por la Secretaría de Turismo y Cultura de Jujuy · Precios de vuelos levantados de Google Flights el 17-ago-2026 · Precios en pesos sujetos a inflación, la referencia estable es el dólar<br>
+      <strong style="color:var(--ocre)">Pendiente de decisión: volver el martes 9 (Plan B) o el miércoles 10 (Plan A, recomendado)</strong>
+    </p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  // Countdown
+  var target = new Date('2027-02-05T07:00:00-03:00').getTime();
+  var el = document.getElementById('cd');
+  function unit(n,l){return '<div class="cd-unit"><div class="cd-num">'+n+'</div><div class="cd-label">'+l+'</div></div>';}
+  function tick(){
+    var d = target - Date.now();
+    if(d<=0){ el.innerHTML = '<div class="cd-unit"><div class="cd-num">¡Vamos!</div></div>'; return; }
+    var s=Math.floor(d/1000), days=Math.floor(s/86400), h=Math.floor(s%86400/3600), m=Math.floor(s%3600/60), sec=s%60;
+    el.innerHTML = unit(days,'días')+unit(String(h).padStart(2,'0'),'horas')+unit(String(m).padStart(2,'0'),'min')+unit(String(sec).padStart(2,'0'),'seg');
+  }
+  tick(); setInterval(tick,1000);
+
+  // Mapa
+  var stops = [
+    {n:'Salta capital · BASE', c:[-24.7859,-65.4117], col:'#c2542e', d:'Casa 5 noches · 1.221 m · peñas de Balcarce'},
+    {n:'Aeropuerto Güemes (SLA)', c:[-24.856,-65.486], col:'#8c3b1e', d:'Llegada vie 5 · 9:14 · salida mié 10 · 21:20'},
+    {n:'San Lorenzo', c:[-24.735,-65.497], col:'#5f7a4a', d:'10 km · zona de casas quinta con pileta'},
+    {n:'Purmamarca', c:[-23.745,-65.500], col:'#d9a441', d:'2.192 m · Cerro de los Siete Colores · comprar talco acá'},
+    {n:'Salinas Grandes', c:[-23.62,-65.95], col:'#2e7d8a', d:'3.450 m · domingo 7 a la mañana por la Cuesta de Lipán'},
+    {n:'Maimará', c:[-23.626,-65.406], col:'#d9a441', d:'Bajada del Cerro Negro · domingo 7 a la tarde'},
+    {n:'TILCARA · Desentierro', c:[-23.577,-65.393], col:'#7b4a6e', d:'2.465 m · sáb 6 · 11:30 Mojón del Matadero · 2 noches acá'},
+    {n:'Uquía · Bajada de los Diablos', c:[-23.297,-65.360], col:'#7b4a6e', d:'sáb 6 · 16:00 · la más famosa de la Quebrada'},
+    {n:'Humahuaca', c:[-23.205,-65.351], col:'#7b4a6e', d:'2.939 m · sáb 6 · 19:00 Topamiento de los Cholos'},
+    {n:'Serranía del Hornocal', c:[-23.170,-65.180], col:'#1f3540', d:'4.350 m · 25 km de ripio · lun 8 si no llovió'},
+    {n:'Cabra Corral', c:[-25.267,-65.317], col:'#5f7a4a', d:'Bungee, tirolesa y pileta · mié 10 antes del vuelo'},
+    {n:'Cafayate', c:[-26.073,-65.975], col:'#c2542e', d:'Bodegas · mar 9 · Quebrada de las Conchas en el camino'}
+  ];
+  var map = L.map('map', {scrollWheelZoom:false}).setView([-24.9,-65.5], 7);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:18
+  }).addTo(map);
+  var bounds = [];
+  stops.forEach(function(s){
+    L.circleMarker(s.c,{radius:9,fillColor:s.col,color:'#fff',weight:2.5,opacity:1,fillOpacity:.92})
+     .addTo(map)
+     .bindPopup('<strong style="font-size:14px">'+s.n+'</strong><br><span style="font-size:12.5px;color:#575d66">'+s.d+'</span>');
+    bounds.push(s.c);
+  });
+  // Eje norte (Quebrada) y eje sur (vino)
+  L.polyline([[-24.7859,-65.4117],[-23.745,-65.500],[-23.626,-65.406],[-23.577,-65.393],[-23.297,-65.360],[-23.205,-65.351],[-23.170,-65.180]],
+    {color:'#7b4a6e',weight:3,opacity:.55,dashArray:'8,7'}).addTo(map);
+  L.polyline([[-23.745,-65.500],[-23.62,-65.95]],{color:'#2e7d8a',weight:3,opacity:.55,dashArray:'8,7'}).addTo(map);
+  L.polyline([[-24.7859,-65.4117],[-25.267,-65.317],[-26.073,-65.975]],
+    {color:'#c2542e',weight:3,opacity:.55,dashArray:'8,7'}).addTo(map);
+  map.fitBounds(bounds,{padding:[45,45]});
+})();
+</script>
+</body>
+</html>
