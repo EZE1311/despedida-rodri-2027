@@ -1,7 +1,7 @@
 # Despedida de Rodri · Salta & Jujuy · Carnaval 2027
 
-Itinerario, presupuesto y logística para la despedida de soltero de Rodri.
-**5 al 10 de febrero de 2027** · 10 personas desde Buenos Aires.
+Itinerario, presupuesto y logística para la despedida de soltero de Rodri. Base en Tilcara, Quebrada de Humahuaca.
+**5 al 9 de febrero de 2027** · 10 personas desde Buenos Aires.
 
 👉 **[Ver el plan](https://eze1311.github.io/despedida-rodri-2027/)**
 
