@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Despedida de Rodri · Quebrada de Humahuaca · Carnaval 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root{
+    --terracota:#c2542e;
+    --ocre:#d9a441;
+    --arcilla:#8c3b1e;
+    --cardon:#5f7a4a;
+    --turquesa:#2e7d8a;
+    --hornocal:#7b4a6e;
+    --puna:#1f3540;
+    --arena:#f6ecdc;
+    --crema:#fcf6ec;
+    --blanco:#fffdf8;
+    --tinta:#26292f;
+    --tinta-soft:#575d66;
+    --tinta-mute:#8b9099;
+    --linea:#e8dcc6;
+    --sh-soft:0 4px 20px rgba(90,50,30,.07);
+    --sh-card:0 8px 32px rgba(90,50,30,.09);
+    --sh-hover:0 12px 40px rgba(90,50,30,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--tinta);background:var(--crema);line-height:1.65;font-size:15.5px;-webkit-font-smoothing:antialiased}
+  .container{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  .topbar{background:linear-gradient(135deg,var(--ocre) 0%,var(--terracota) 55%,var(--arcilla) 100%);color:#fff;padding:10px 24px;text-align:center;font-size:12.5px;font-weight:500;letter-spacing:.3px}
+  .topbar strong{font-weight:700}
+
+  .hero{background:
+      linear-gradient(180deg,rgba(31,53,64,.06) 0%,rgba(194,84,46,.13) 60%,transparent 100%),
+      radial-gradient(ellipse at top left,rgba(217,164,65,.28) 0%,transparent 52%),
+      radial-gradient(ellipse at bottom right,rgba(46,125,138,.22) 0%,transparent 52%),
+      var(--crema);
+    padding:76px 0 90px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:24px;right:6%;width:220px;height:220px;background:radial-gradient(circle,var(--ocre) 0%,transparent 70%);opacity:.35;border-radius:50%;filter:blur(34px)}
+  .hero::after{content:'';position:absolute;bottom:30px;left:7%;width:280px;height:280px;background:radial-gradient(circle,var(--turquesa) 0%,transparent 70%);opacity:.22;border-radius:50%;filter:blur(44px)}
+  .hero-content{position:relative;z-index:1;text-align:center}
+  .hero-eyebrow{font-family:'Caveat',cursive;font-size:32px;color:var(--terracota);margin-bottom:6px;font-weight:700;transform:rotate(-1.5deg);display:inline-block}
+  .hero h1{font-family:'Cormorant Garamond',serif;font-size:70px;font-weight:500;line-height:1.05;color:var(--puna);letter-spacing:-1.5px;margin-bottom:16px}
+  .hero h1 em{font-style:italic;color:var(--terracota);font-weight:400}
+  .hero-tagline{font-size:17.5px;color:var(--tinta-soft);max-width:660px;margin:0 auto 30px;line-height:1.65}
+  .hero-dates{margin-top:26px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--puna);font-style:italic}
+  .hero-dates span{display:inline-block;padding:0 14px;color:var(--ocre);font-size:18px}
+  .cd-grid{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px}
+  .cd-unit{background:var(--blanco);border-radius:18px;padding:16px 20px 12px;min-width:92px;text-align:center;box-shadow:var(--sh-soft);border:1px solid var(--linea)}
+  .cd-num{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:600;color:var(--terracota);line-height:1;font-variant-numeric:tabular-nums}
+  .cd-label{font-size:10.5px;text-transform:uppercase;letter-spacing:2px;color:var(--tinta-soft);margin-top:7px;font-weight:600}
+
+  .nav{background:rgba(252,246,236,.93);padding:15px 0;border-bottom:1px solid var(--linea);position:sticky;top:0;z-index:400;backdrop-filter:blur(10px)}
+  .nav-inner{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;font-size:12.8px;font-weight:500;color:var(--tinta-soft)}
+  .nav-inner a{color:inherit;text-decoration:none;transition:color .2s;border-bottom:1.5px solid transparent;padding-bottom:2px}
+  .nav-inner a:hover{color:var(--terracota);border-bottom-color:var(--terracota)}
+
+  section{padding:72px 0}
+  section.alt{background:var(--blanco)}
+  .section-eyebrow{font-family:'Caveat',cursive;font-size:26px;color:var(--terracota);display:block;margin-bottom:2px;font-weight:600}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:500;color:var(--puna);line-height:1.12;margin-bottom:14px;letter-spacing:-.5px}
+  .section-title em{font-style:italic;color:var(--terracota)}
+  .section-lead{font-size:16.5px;color:var(--tinta-soft);max-width:740px;margin-bottom:40px;line-height:1.7}
+
+  .grid{display:grid;gap:20px;margin-top:28px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+  .card{background:var(--blanco);border-radius:18px;padding:26px 24px;box-shadow:var(--sh-soft);border:1px solid var(--linea);transition:transform .3s,box-shadow .3s}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--sh-hover)}
+  .card-icon{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--ocre) 0%,var(--terracota) 100%);display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:13px}
+  .card.t2 .card-icon{background:linear-gradient(135deg,var(--turquesa) 0%,var(--puna) 100%)}
+  .card.t3 .card-icon{background:linear-gradient(135deg,var(--cardon) 0%,#33502a 100%)}
+  .card.t4 .card-icon{background:linear-gradient(135deg,var(--hornocal) 0%,var(--arcilla) 100%)}
+  .card-label{font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tinta-mute);font-weight:600;margin-bottom:5px}
+  .card-value{font-family:'Cormorant Garamond',serif;font-size:31px;font-weight:600;color:var(--puna);line-height:1.05;margin-bottom:3px}
+  .card-sub{font-size:13.5px;color:var(--tinta-soft);margin-top:3px}
+
+  .hl{background:linear-gradient(135deg,#fff8ec 0%,var(--blanco) 100%);border-radius:22px;padding:34px 36px;box-shadow:var(--sh-card);border-top:4px solid var(--ocre);margin:30px 0}
+  .hl.win{border-top-color:var(--cardon);background:linear-gradient(135deg,#f2f7ed 0%,var(--blanco) 100%)}
+  .hl.warn{border-top-color:var(--terracota);background:linear-gradient(135deg,#fdf0ea 0%,var(--blanco) 100%)}
+  .hl h3{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:600;color:var(--puna);margin-bottom:8px}
+  .hl p{color:var(--tinta-soft);margin-bottom:10px}
+  .hl p:last-child{margin-bottom:0}
+  .hl strong{color:var(--tinta)}
+
+  .badge{display:inline-block;font-size:10.5px;text-transform:uppercase;letter-spacing:1.3px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:10px}
+  .b-win{background:var(--cardon);color:#fff}
+  .b-warn{background:var(--terracota);color:#fff}
+  .b-info{background:var(--turquesa);color:#fff}
+  .b-gold{background:var(--ocre);color:#42320d}
+  .b-mute{background:var(--linea);color:var(--tinta-soft)}
+
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14px;background:var(--blanco);border-radius:14px;overflow:hidden;box-shadow:var(--sh-soft)}
+  th{background:var(--puna);color:#fff;text-align:left;padding:13px 15px;font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;font-weight:600}
+  td{padding:12px 15px;border-bottom:1px solid var(--linea);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#fffaf1}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.total td{background:var(--arena);font-weight:700;color:var(--puna);border-top:2px solid var(--ocre)}
+  tr.best td{background:#f2f7ed}
+  tr.dim td{opacity:.5}
+  .tbl-wrap{overflow-x:auto}
+  .sect-row td{background:var(--arena);font-weight:700;color:var(--arcilla);font-size:12px;letter-spacing:1.2px;text-transform:uppercase}
+
+  .day{background:var(--blanco);border-radius:20px;box-shadow:var(--sh-soft);border:1px solid var(--linea);margin-bottom:18px;overflow:hidden}
+  .day-head{display:flex;align-items:center;gap:16px;padding:20px 26px;background:linear-gradient(90deg,rgba(217,164,65,.14) 0%,transparent 60%);border-bottom:1px solid var(--linea);flex-wrap:wrap}
+  .day-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:var(--terracota);line-height:1;min-width:52px}
+  .day-t{flex:1;min-width:200px}
+  .day-t h3{font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:600;color:var(--puna);line-height:1.2}
+  .day-t .day-sub{font-size:13px;color:var(--tinta-mute);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;margin-top:3px}
+  .day-sleep{font-size:12.5px;color:var(--tinta-soft);background:var(--arena);padding:6px 13px;border-radius:20px;font-weight:600;white-space:nowrap}
+  .day-body{padding:22px 26px}
+  .slot{display:flex;gap:16px;padding:11px 0;border-bottom:1px dashed var(--linea)}
+  .slot:last-child{border-bottom:none}
+  .slot-time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--terracota);min-width:62px;font-size:13.5px;padding-top:2px}
+  .slot-txt{flex:1;font-size:14.5px;color:var(--tinta-soft)}
+  .slot-txt strong{color:var(--tinta)}
+  .slot.key .slot-txt strong{color:var(--arcilla)}
+  .slot.key{background:linear-gradient(90deg,rgba(217,164,65,.1),transparent);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:8px}
+
+  #map{height:480px;border-radius:20px;box-shadow:var(--sh-card);margin-top:26px;z-index:1}
+
+  ul.clean{list-style:none;margin:12px 0}
+  ul.clean li{padding:7px 0 7px 26px;position:relative;color:var(--tinta-soft);font-size:14.5px}
+  ul.clean li::before{content:'▸';position:absolute;left:6px;color:var(--ocre);font-weight:700}
+  ul.clean li strong{color:var(--tinta)}
+  ul.warn li::before{content:'!';color:var(--terracota);font-weight:800;left:9px}
+
+  .pill-row{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+  .pill{background:var(--arena);color:var(--tinta-soft);border-radius:20px;padding:6px 14px;font-size:12.5px;font-weight:500;border:1px solid var(--linea)}
+  .pill b{color:var(--arcilla)}
+
+  a{color:var(--turquesa)}
+  a:hover{color:var(--terracota)}
+
+  .quote{font-family:'Cormorant Garamond',serif;font-size:25px;font-style:italic;color:var(--puna);text-align:center;max-width:760px;margin:44px auto;line-height:1.5;position:relative;padding:0 40px}
+  .quote::before,.quote::after{font-size:62px;color:var(--ocre);opacity:.4;position:absolute;font-family:'Cormorant Garamond',serif;line-height:1}
+  .quote::before{content:'“';left:0;top:-10px}
+  .quote::after{content:'”';right:0;bottom:-34px}
+
+  .tl{position:relative;margin:34px 0 0;padding-left:34px}
+  .tl::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--terracota),var(--ocre),var(--turquesa))}
+  .tl-item{position:relative;padding-bottom:26px}
+  .tl-item::before{content:'';position:absolute;left:-30px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ocre);border:2.5px solid var(--blanco);box-shadow:0 0 0 2px var(--ocre)}
+  .tl-item.urgent::before{background:var(--terracota);box-shadow:0 0 0 2px var(--terracota)}
+  .tl-when{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700;color:var(--terracota);margin-bottom:3px}
+  .tl-item h4{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--puna);font-weight:600;margin-bottom:3px}
+  .tl-item p{font-size:14px;color:var(--tinta-soft)}
+
+  /* ---- calculadora de presupuesto ---- */
+  .calc-controls{display:flex;flex-wrap:wrap;gap:22px;background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:22px 26px;box-shadow:var(--sh-soft);margin-bottom:24px;align-items:flex-end}
+  .ctrl{display:flex;flex-direction:column;gap:7px}
+  .ctrl label{font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tinta-mute);font-weight:700}
+  .ctrl select,.ctrl input{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:600;color:var(--puna);background:var(--crema);border:1.5px solid var(--linea);border-radius:11px;padding:10px 14px;min-width:120px;outline:none;transition:border-color .2s}
+  .ctrl select:focus,.ctrl input:focus{border-color:var(--ocre)}
+  .ctrl input{font-variant-numeric:tabular-nums}
+  .seg{display:flex;background:var(--crema);border:1.5px solid var(--linea);border-radius:11px;padding:3px;gap:3px}
+  .seg-btn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tinta-soft);background:transparent;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;transition:all .2s}
+  .seg-btn.active{background:var(--terracota);color:#fff;box-shadow:0 2px 8px rgba(194,84,46,.3)}
+
+  .calc-hero{display:flex;flex-wrap:wrap;gap:0;background:linear-gradient(135deg,var(--puna) 0%,#2c4a58 100%);border-radius:22px;overflow:hidden;box-shadow:var(--sh-card);margin-bottom:22px}
+  .ch-main{flex:1 1 300px;padding:34px 36px;border-right:1px solid rgba(255,255,255,.12)}
+  .ch-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9fb3bd;font-weight:700;margin-bottom:8px}
+  .ch-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:600;color:var(--ocre);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .ch-usd{font-size:16px;color:#b6c9d2;margin-top:8px;font-variant-numeric:tabular-nums}
+  .ch-side{flex:1 1 300px;padding:26px 32px;display:flex;flex-direction:column;justify-content:center;gap:11px}
+  .ch-item{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14px}
+  .ch-k{color:#9fb3bd}
+  .ch-v{color:#fff;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+
+  .aviso{border-radius:14px;padding:15px 20px;margin-bottom:14px;font-size:14.5px;border-left:4px solid}
+  .aviso.rojo{background:#fdf0ea;border-color:var(--terracota);color:#7a3418}
+  .aviso.amar{background:#fdf7e6;border-color:var(--ocre);color:#6b5416}
+  .aviso.verde{background:#f2f7ed;border-color:var(--cardon);color:#3d5230}
+  .aviso strong{font-weight:700}
+
+  tr.fijo td:first-child::after{content:'fijo';display:inline-block;margin-left:8px;font-size:9.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;background:var(--turquesa);color:#fff;padding:2px 7px;border-radius:10px;vertical-align:middle}
+  tr.percap td:first-child::after{content:'por cabeza';display:inline-block;margin-left:8px;font-size:9.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;background:var(--arena);color:var(--arcilla);padding:2px 7px;border-radius:10px;vertical-align:middle}
+
+  @media(max-width:640px){
+    .ch-main{padding:26px 22px;border-right:none;border-bottom:1px solid rgba(255,255,255,.12)}
+    .ch-num{font-size:46px}
+    .ch-side{padding:20px 22px}
+    .calc-controls{padding:18px}
+    .ctrl select,.ctrl input{min-width:100%}
+  }
+
+  footer{background:var(--puna);color:#cfd6da;padding:48px 0 40px;text-align:center}
+  footer .f-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;margin-bottom:10px;font-style:italic}
+  footer .f-meta{font-size:12.5px;color:#8fa0a9;margin-top:18px;line-height:1.8}
+  footer a{color:var(--ocre)}
+
+  @media(max-width:640px){
+    .hero h1{font-size:44px}
+    .section-title{font-size:32px}
+    .container{padding:0 18px}
+    .day-head{padding:16px 18px}
+    .day-body{padding:18px}
+    .hl{padding:26px 22px}
+    .quote{font-size:20px;padding:0 26px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  🎭 <strong>CARNAVAL GRANDE:</strong> 6, 7 y 8 de febrero de 2027 · Desentierro sábado 6 · Martes de Chaya el 9 · Feriados nacionales lunes 8 y martes 9
+</div>
+
+<div class="hero">
+  <div class="container hero-content">
+    <span class="hero-eyebrow">La última de Rodri como hombre libre</span>
+    <h1>Quebrada de <em>Humahuaca</em></h1>
+    <p class="hero-tagline">Cuatro noches viviendo adentro del carnaval más grande de la Argentina, con base en Tilcara. Diez tipos, dos autos, una casa propia y el talco entrando por lugares donde no debería entrar talco.</p>
+    <div class="hero-dates">Viernes 5 <span>—</span> Martes 9 de febrero de 2027</div>
+    <div class="cd-grid" id="cd"></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#billete">El billete</a>
+    <a href="#plan">Día por día</a>
+    <a href="#mapa">Mapa</a>
+    <a href="#dormir">La casa</a>
+    <a href="#ruedas">Ruedas</a>
+    <a href="#presupuesto">Presupuesto</a>
+    <a href="#reservas">Qué cerrar</a>
+    <a href="#manual">Manual</a>
+    <a href="#agenda">Agenda</a>
+    <a href="comparativo.html" style="color:var(--terracota);font-weight:700">⚖️ Comparativo</a>
+  </div>
+</nav>
+
+<!-- ============ EL BILLETE ============ -->
+<section id="billete">
+  <div class="container">
+    <span class="section-eyebrow">Lo primero, siempre</span>
+    <h2 class="section-title">El <em>billete</em></h2>
+    <p class="section-lead">Precios reales levantados de <strong>Despegar el 18 de agosto de 2026</strong>, precio final por persona con impuestos incluidos, tramos sueltos. Filtrado a lo que pediste: <strong>salida el viernes de tarde o noche, vuelta el martes de tarde o noche, y sólo vuelos directos</strong>. Lo que queda en gris abajo es lo que se descarta por horario o por tener escala.</p>
+
+    <div class="hl warn">
+      <span class="badge b-warn">La decisión estructural</span>
+      <h3>Aunque durmamos en la Quebrada, se vuela a Salta</h3>
+      <p>Jujuy queda a 1 hora de Tilcara y Salta a 2h30. Suena obvio volar a Jujuy. No lo es: <strong>el martes 9 no vuela JetSMART desde Jujuy, sólo Aerolíneas, y el pasaje sale $544.600 contra $190.690 desde Salta.</strong></p>
+      <p>Sumando ida y vuelta, <strong>Jujuy cuesta $745.037 más por cabeza</strong> — casi 7,5 millones para los diez. Esa hora y media extra de ruta es el negocio más rentable del viaje.</p>
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:27px;color:var(--puna);margin:38px 0 4px">Ida · viernes 5 de febrero</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Horario</th><th>Aerolínea</th><th>Ruta</th><th class="num">Precio final</th><th>Comentario</th></tr></thead>
+      <tbody>
+        <tr class="best">
+          <td><strong>12:50 → 15:05</strong></td>
+          <td>Aerolíneas</td>
+          <td>AEP → SLA · directo</td>
+          <td class="num"><strong>$153.473</strong><br><span style="font-size:12px;color:var(--tinta-mute)">$138.820 c/Club</span></td>
+          <td><strong>La del grupo.</strong> Llegan 15:05, retiran los autos y suben a Tilcara con luz de día, a dormir en la casa que ya está paga desde esa noche. Incluye equipaje despachado. <strong>Es la que está cargada en el presupuesto</strong></td>
+        </tr>
+        <tr>
+          <td><strong>21:05 → 23:19</strong></td>
+          <td>JetSMART</td>
+          <td>AEP → SLA · directo</td>
+          <td class="num"><strong>$137.755</strong><br><span style="font-size:12px;color:var(--tinta-mute)">$128.112 c/Club</span></td>
+          <td><strong style="color:var(--turquesa)">La alternativa para el que no llegue al del mediodía.</strong> El que no pueda salir el viernes a las 12:50 —laburo, lo que sea— toma este y sube el sábado temprano. Llegan 23:19 y la RN 9 de noche no se maneja, así que duerme en Salta. <strong>Va por cuenta propia:</strong> el vuelo y el hotel los paga quien la elija, y no entran al pozo común</td>
+        </tr>
+        <tr>
+          <td>21:05 → 23:19</td>
+          <td>JetSMART</td>
+          <td>AEP → SLA · directo</td>
+          <td class="num">$152.381</td>
+          <td>Misma franja, categoría con equipaje despachado</td>
+        </tr>
+        <tr>
+          <td>17:15 → 19:35</td>
+          <td>Aerolíneas</td>
+          <td>AEP → <strong>JUJ</strong> · directo</td>
+          <td class="num">$544.600</td>
+          <td>El único vuelo de tarde a Jujuy. Cuatro veces más caro. Descartado</td>
+        </tr>
+        <tr class="dim">
+          <td>07:00 → 09:14</td>
+          <td>JetSMART</td>
+          <td>EZE → SLA · directo</td>
+          <td class="num">$137.755</td>
+          <td>Descartada por horario</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:27px;color:var(--puna);margin:38px 0 4px">Vuelta · martes 9 de febrero</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Horario</th><th>Aerolínea</th><th>Ruta</th><th class="num">Precio final</th><th>Comentario</th></tr></thead>
+      <tbody>
+        <tr class="best">
+          <td><strong>22:46 → 00:51</strong><sup>+1</sup></td>
+          <td>JetSMART</td>
+          <td>SLA → AEP · directo</td>
+          <td class="num"><strong>$190.690</strong></td>
+          <td><strong>La del grupo.</strong> El más barato de los directos del martes. Permite hacer el viñedo en Purmamarca a la tarde, bajar con luz y todavía cenar tranquilos en Salta. <strong>Es la que está cargada en el presupuesto</strong></td>
+        </tr>
+        <tr>
+          <td><strong>19:00 → 21:05</strong></td>
+          <td>Aerolíneas</td>
+          <td>SLA → EZE · directo</td>
+          <td class="num"><strong>$209.337</strong></td>
+          <td>Si prefieren no llegar de madrugada a Buenos Aires. Cuesta $18.647 más y obliga a salir de la bodega 14:30 en vez de 16:30, así que la visita queda corta</td>
+        </tr>
+        <tr>
+          <td>13:00 → 15:05<br>15:35 → 17:40</td>
+          <td>Aerolíneas</td>
+          <td>SLA → AEP · directo</td>
+          <td class="num">$260.592</td>
+          <td>Obliga a bajar de la Quebrada a la mañana: se pierden el Martes de Chaya y el viñedo. Y es la más cara</td>
+        </tr>
+        <tr class="dim">
+          <td>21:19 → 01:17<sup>+1</sup></td>
+          <td>JetSMART</td>
+          <td>SLA → AEP · <strong>1 escala en Mendoza</strong></td>
+          <td class="num">$174.346</td>
+          <td>Descartada: sólo vuelos directos. Sería la más barata del día, pero son 3h58 y escala de madrugada</td>
+        </tr>
+        <tr>
+          <td>20:15 → 22:25</td>
+          <td>Aerolíneas</td>
+          <td><strong>JUJ</strong> → AEP · directo</td>
+          <td class="num">$544.600</td>
+          <td>Jujuy de nuevo. Casi tres veces el precio de Salta</td>
+        </tr>
+        <tr class="dim">
+          <td>10:33 → 12:38</td>
+          <td>JetSMART</td>
+          <td>SLA → AEP · directo</td>
+          <td class="num">$174.346</td>
+          <td>Descartada por horario</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="grid g3">
+      <div class="card t3">
+        <div class="card-icon">✅</div>
+        <div class="card-label">El combo del grupo</div>
+        <div class="card-value">$344.163</div>
+        <p class="card-sub">Aerolíneas 12:50 de ida + JetSMART 22:46 de vuelta. Los dos directos. Por persona, con impuestos. <strong>$3.441.630 los diez.</strong></p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌙</div>
+        <div class="card-label">Si alguno no llega al del mediodía</div>
+        <div class="card-value">$328.445</div>
+        <p class="card-sub">JetSMART 21:05 de ida + la misma vuelta. Sale $15.718 menos, pero se le suma una noche de hotel en Salta. <strong>Lo paga quien lo elija</strong>, no el pozo común.</p>
+      </div>
+      <div class="card t2">
+        <div class="card-icon">📅</div>
+        <div class="card-label">Lo que cuesta el martes</div>
+        <div class="card-value">+$37.068</div>
+        <p class="card-sub">El calendario de Despegar para volver desde Salta: sáb 6 y lun 8 a $93.937, mié 10 a $137.278 y <strong>mar 9 a $174.346</strong>. El martes es el día en que vuelve todo el país.</p>
+      </div>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-info">Los dos vuelos de ida</span>
+      <h3>El del mediodía para el grupo, el de la noche para el que no llegue</h3>
+      <p>El JetSMART de las 21:05 sale $15.718 menos, pero llega 23:19 y la RN 9 de noche no se maneja. Quien lo tome duerme en Salta y sube el sábado a la mañana, a tiempo para el desentierro de las 11:30 si sale temprano.</p>
+      <p><strong>Por qué no es el vuelo del grupo:</strong> la casa de Tilcara está paga por cuatro noches, del viernes 5 al martes 9. Si los diez llegan a medianoche, esa primera noche se paga igual y no se usa — son <strong>$611.917 tirados</strong>, más el hotel en Salta. Para uno o dos que no tengan alternativa el costo es marginal; para los diez, el ahorro de $157.180 en pasajes se convierte en más de un millón de pérdida.</p>
+      <p style="margin-top:12px"><strong>Cómo se reparte:</strong> el presupuesto de abajo asume que todos toman el de las 12:50. El que necesite el nocturno se banca la diferencia del pasaje y su noche de hotel por fuera del pozo común, así el número del grupo no se ensucia.</p>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Cómo comprar</span>
+      <h3>Tres cosas que van a ahorrar plata y dolores de cabeza</h3>
+      <ul class="clean">
+        <li><strong>Despegar no deja comprar 10 pasajes juntos.</strong> Lo probé: rebota con "número de pasajeros inválido". Van a tener que partir en dos operaciones o comprar directo en las webs de las aerolíneas, que sí permiten grupos.</li>
+        <li><strong>Los diez se compran el mismo día, idealmente la misma hora.</strong> Las low cost venden por cupos: cuando se agota el barato salta al siguiente escalón. Si compran de a dos durante una semana, los últimos pagan el doble.</li>
+        <li><strong>El Club Despegar da entre 7% y 9% de descuento</strong> y en estos tramos son $9.643 a $14.653 por persona. Si alguno del grupo ya es socio, que compre él.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DÍA POR DÍA ============ -->
+<section class="alt" id="plan">
+  <div class="container">
+    <span class="section-eyebrow">El plan</span>
+    <h2 class="section-title">Día por <em>día</em></h2>
+    <p class="section-lead">Base fija en Tilcara las cuatro noches. Sin hacer y deshacer valijas, sin bajar a Salta a dormir, y con todos los pueblos del carnaval a menos de 45 minutos. El precio a pagar es que Cafayate queda afuera — está a 4h50 de manejo desde la Quebrada y no entra de ninguna manera.</p>
+
+    <!-- VIERNES 5 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">05</div>
+        <div class="day-t">
+          <h3>Subida a la Quebrada</h3>
+          <div class="day-sub">Viernes · Buenos Aires → Salta → Tilcara · 2.465 msnm</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara · noche 1</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">12:50</div><div class="slot-txt">Despegue de <strong>Aeroparque</strong>. Aerolíneas, con equipaje despachado incluido.</div></div>
+        <div class="slot"><div class="slot-time">15:05</div><div class="slot-txt">Aterrizan en <strong>Salta (SLA)</strong>. Retiran los dos autos en el aeropuerto y cargan combustible antes de salir.</div></div>
+        <div class="slot key"><div class="slot-time">16:00</div><div class="slot-txt"><strong>RN 9 hacia el norte.</strong> 205 km desde el aeropuerto, 2h30. Se sube con luz de día a propósito: este tramo tiene puntos negros marcados por Vialidad en Huichaira y Bordo Sococha, y febrero es temporada de crecidas.</div></div>
+        <div class="slot"><div class="slot-time">18:30</div><div class="slot-txt">Llegada a <strong>Tilcara</strong>. Check-in en la casa reservada, descargar, primera cerveza mirando el cerro.</div></div>
+        <div class="slot"><div class="slot-time">21:00</div><div class="slot-txt">Vuelta tranquila por el pueblo y cena. <strong>Noche de aclimatación, en serio:</strong> pasaron de 25 metros sobre el nivel del mar a 2.465 en menos de seis horas. Si la queman fuerte hoy, mañana —el día más importante del viaje— la van a pasar mal.</div></div>
+        <div class="slot"><div class="slot-time">→</div><div class="slot-txt" style="color:var(--tinta-mute)"><strong style="color:var(--turquesa)">El que no llegue al vuelo del mediodía</strong> toma el JetSMART de las 21:05, duerme en Salta y sube el sábado temprano. Saliendo 7:30 llega a Tilcara 10:00, a tiempo para el desentierro de las 11:30. Que avise antes para coordinar quién lo pasa a buscar o si alquila su propio auto.</div></div>
+      </div>
+    </div>
+
+    <!-- SÁBADO 6 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">06</div>
+        <div class="day-t">
+          <h3>El Desentierro del Diablo</h3>
+          <div class="day-sub">Sábado · el día que no se puede perder</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara · noche 2</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:00</div><div class="slot-txt">Desayuno largo. Comprar <strong>talco, espuma y bebida</strong> antes de que arranque todo: durante el carnaval los precios se disparan y se agota. Y sacar <strong>efectivo</strong>, que en la Quebrada casi no hay cajeros y la señal se cae por saturación.</div></div>
+        <div class="slot key"><div class="slot-time">11:30</div><div class="slot-txt"><strong>TILCARA · Desentierro fortinero en el Mojón del Matadero.</strong> Se desentierra al Pujllay: un muñeco de trapo que quedó enterrado bajo la apacheta desde el carnaval pasado. Se chaya el mojón con alcohol, coca y cigarrillos. Este momento es ritual — se acompaña, no se interrumpe. La ventaja de dormir acá: caminan.</div></div>
+        <div class="slot"><div class="slot-time">14:00</div><div class="slot-txt">Bajan el resto de las comparsas de Tilcara a la calle. Acá empieza el descontrol de talco, harina, espuma y papel picado. En Tilcara además se juega con pintura.</div></div>
+        <div class="slot key"><div class="slot-time">16:00</div><div class="slot-txt"><strong>UQUÍA · Bajada de los Diablos</strong> al pie del Cerro Blanco, 45 km al norte. La más famosa de toda la Quebrada. La ruta colapsa, así que hay que salir de Tilcara a las 14:45 y con un conductor sobrio designado.</div></div>
+        <div class="slot key"><div class="slot-time">19:00</div><div class="slot-txt"><strong>HUMAHUACA · Topamiento de los Cholos</strong> (2.939 m). El cierre más convocante del día, en los mojones tradicionales. Sigue hasta bien entrada la noche.</div></div>
+        <div class="slot"><div class="slot-time">23:00 →</div><div class="slot-txt"><strong>Fortines.</strong> Las comparsas se mudan a peñas que siguen hasta que sale el sol, más las "invitaciones" en casas de familia. Acá se define si Rodri llega entero al casamiento.</div></div>
+      </div>
+    </div>
+
+    <!-- DOMINGO 7 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">07</div>
+        <div class="day-t">
+          <h3>Salinas Grandes y Cerro Negro</h3>
+          <div class="day-sub">Domingo de Tentación · hasta 4.170 msnm</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara · noche 3</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:30</div><div class="slot-txt">Arranque piadoso. Agua, ibuprofeno, hoja de coca. Si a alguien le duele fuerte la cabeza, ojo: <strong>el apunamiento se disfraza de resaca</strong> y hoy se sube a 4.170 metros.</div></div>
+        <div class="slot key"><div class="slot-time">10:30</div><div class="slot-txt"><strong>Purmamarca → Cuesta de Lipán → Salinas Grandes.</strong> 90 km desde Tilcara. La RN 52 sube de 2.192 a 4.170 m en 17 km de curvas y después se abre el blanco absoluto a 3.450 m. Llamas, vicuñas y burros cruzando. <strong>Se maneja de mañana, sin excepción.</strong></div></div>
+        <div class="slot"><div class="slot-time">14:30</div><div class="slot-txt">Bajada por la cuesta y almuerzo en Purmamarca, al pie del Cerro de los Siete Colores.</div></div>
+        <div class="slot key"><div class="slot-time">17:00</div><div class="slot-txt"><strong>MAIMARÁ · Bajada del Cerro Negro.</strong> La comparsa baja el cerro y frena el tránsito de la RN 9. A 7 km de la casa.</div></div>
+        <div class="slot"><div class="slot-time">21:00</div><div class="slot-txt">Segunda noche de fortín en Tilcara, o cena tranquila si el sábado hizo estragos. Nadie va a juzgar.</div></div>
+      </div>
+    </div>
+
+    <!-- LUNES 8 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">08</div>
+        <div class="day-t">
+          <h3>Hornocal y Carnaval Grande</h3>
+          <div class="day-sub">Lunes · feriado nacional · 4.350 msnm</div>
+        </div>
+        <div class="day-sleep">🛏 Tilcara · noche 4</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:00</div><div class="slot-txt">Salida temprano hacia el norte. 45 km hasta Humahuaca.</div></div>
+        <div class="slot"><div class="slot-time">10:00</div><div class="slot-txt"><strong>Humahuaca.</strong> Misa en la Catedral con bendición de disfraces, topamiento de banderas en el atrio, invitación en la explanada del Monumento con saratoga y chicha. Sí, a las once de la mañana.</div></div>
+        <div class="slot key"><div class="slot-time">11:30</div><div class="slot-txt"><strong>Serranía del Hornocal</strong> — 25 km de ripio por la RP 73 hasta 4.350 m. El cerro de catorce colores. <span style="color:var(--arcilla)"><strong>Condicional:</strong> si llovió, se consulta en Humahuaca antes de subir. Los últimos 3 km entra un solo auto. Y nunca con resaca, que es la altura máxima de todo el viaje.</span></div></div>
+        <div class="slot"><div class="slot-time">14:30</div><div class="slot-txt">Almuerzo en Humahuaca y las comparsas del <strong>Carnaval Grande</strong>, que es el día nominalmente central de la fiesta.</div></div>
+        <div class="slot key"><div class="slot-time">18:00</div><div class="slot-txt"><strong>Vuelta a Tilcara antes de que caiga el sol.</strong> 45 minutos. La ventaja enorme de la base: se duerme a 2.465 m y no a 2.939. Casi 500 metros menos es la mejor decisión de salud del viaje, y no cuesta un peso.</div></div>
+        <div class="slot"><div class="slot-time">22:00</div><div class="slot-txt">Última noche de comparsas en Tilcara. La que hay que aguantar entera.</div></div>
+      </div>
+    </div>
+
+    <!-- MARTES 9 -->
+    <div class="day">
+      <div class="day-head">
+        <div class="day-num">09</div>
+        <div class="day-t">
+          <h3>Martes de Chaya y viñedo de altura</h3>
+          <div class="day-sub">Martes · feriado · Tilcara → Purmamarca → Salta → Buenos Aires</div>
+        </div>
+        <div class="day-sleep">✈️ Vuelo 22:46</div>
+      </div>
+      <div class="day-body">
+        <div class="slot"><div class="slot-time">9:30</div><div class="slot-txt">Check-out. Los bolsos a los autos, que hoy ya no se vuelve.</div></div>
+        <div class="slot key"><div class="slot-time">10:00</div><div class="slot-txt"><strong>Martes de Chaya en Tilcara.</strong> El cierre simbólico del Carnaval Grande. Última ronda de talco y despedida de las comparsas.</div></div>
+        <div class="slot"><div class="slot-time">12:15</div><div class="slot-txt">Salida hacia <strong>Purmamarca</strong>. 26 km, 19 minutos. Va en dirección a Salta, así que no es desvío: es el primer tramo de la bajada.</div></div>
+        <div class="slot key"><div class="slot-time">13:00</div><div class="slot-txt"><strong>BODEGA KINDGARD · Purmamarca, RN 9 km 1739.</strong> Recorrido por los viñedos, la bodega y la cava, más degustación de cuatro etiquetas con quesos y conservas locales. <strong>ARS 35.000 por persona.</strong> Tienen restaurante propio, así que el almuerzo sale ahí mismo.<br><span style="color:var(--arcilla)">Es la única bodega de toda la Quebrada que declara abrir <strong>todos los días</strong>, y el cupo por turno es de <strong>exactamente 10 personas</strong> — o sea que ocupan el turno entero. Reservar por WhatsApp <strong>+54 9 388 409-1595</strong> apenas se confirme el viaje.</span></div></div>
+        <div class="slot key"><div class="slot-time">16:30</div><div class="slot-txt"><strong>Bajada a Salta, con luz.</strong> 179 km desde Purmamarca, 2h14. Después de cuatro días de fiesta y con la ruta cargada de gente volviendo, esto no se hace de noche.</div></div>
+        <div class="slot"><div class="slot-time">19:05</div><div class="slot-txt">Llegada a Salta. <strong>Quedan casi cuatro horas de colchón</strong> antes del vuelo — margen deliberado, porque un corte de ruta de tres horas en la Quebrada en febrero es un evento normal, no una desgracia excepcional.</div></div>
+        <div class="slot"><div class="slot-time">19:30</div><div class="slot-txt">Cena en Salta centro si la ruta vino bien. <strong>El Charrúa</strong> (Caseros 221) abre hasta las 6 de la mañana y es la parrilla obvia. <span style="color:var(--tinta-mute)">Las peñas de Balcarce arrancan el show 21:30 y el vuelo es 22:46: no entran. Es el costo real de haber puesto el viñedo el último día, y me parece un buen cambio.</span></div></div>
+        <div class="slot"><div class="slot-time">21:15</div><div class="slot-txt">Devolución de los autos en el aeropuerto.</div></div>
+        <div class="slot"><div class="slot-time">22:46</div><div class="slot-txt"><strong>SLA → Aeroparque.</strong> Llegada 00:51. El miércoles es de Ceniza y de resaca.</div></div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Por qué Kindgard y no otra</span>
+      <h3>El viñedo del último día se elige por calendario, no por gusto</h3>
+      <p>Hay <strong>una ruta del vino oficial de Jujuy con 20 establecimientos</strong>, dieciséis de ellos en la Quebrada. Pero el lunes 8 y el martes 9 son feriados de Carnaval y la mayoría de estas bodegas son familiares de dos a cinco personas — el riesgo concreto es que el equipo esté en la comparsa y no en la bodega. Ninguna publica horario especial de carnaval, así que hay que llamar igual. Con eso filtrado:</p>
+      <ul class="clean">
+        <li><strong>Kindgard (Purmamarca)</strong> — la única que dice explícitamente "abrimos todos los días". Visitas 11:30 a 16:30, cupo de 10 exactos, $35.000 pp, restaurante propio. Y está sobre la RN 9 camino a Salta. <strong>Gana por lejos.</strong></li>
+        <li><strong>Huichaira (Tilcara)</strong> — a 5 km de la casa, lunes a viernes 10 a 18. Tiene un almuerzo gourmet de tres pasos pensado para grupos de 4 o más. <strong>Es la opción si lo prefieren el lunes 8</strong> en vez del martes.</li>
+        <li><strong>Viñas del Perchel (Huacalera)</strong> — lunes a domingo de 8 a 18, el horario más amplio de la Quebrada. Buen comodín.</li>
+        <li><strong>Fernando Dupont (Maimará)</strong> — a 7 km de la casa, viñedos a 2.500 m, guía bilingüe. <strong>Abre de lunes a sábado: los domingos está cerrada.</strong> Buena opción para el lunes 8, pero hay que preguntar por el estado del vado: para llegar se cruza el lecho del río Grande y febrero es temporada de crecidas.</li>
+        <li><strong>El Bayeh y Casa Mocha</strong> — las más lindas del circuito, pero abren viernes a domingo y miércoles a domingo. <strong>Cerradas lunes y martes.</strong> Si las quieren, hay que moverlas al sábado 6 o domingo 7, que son días de carnaval puro.</li>
+      </ul>
+      <p style="margin-top:12px"><strong>Y alguien no toma.</strong> Jujuy tiene alcohol cero con controles reforzados en carnaval, y después de la degustación hay 179 km hasta el aeropuerto. O conductor designado sobrio, o se contrata el traslado. <strong>Turismo Nativo</strong> (Tilcara, 0388 434-5693) tiene un producto de ruta del vino con chofer y guía que <strong>opera martes</strong> — justo el día que necesitan.</p>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Lo que se pierde</span>
+      <h3>Cafayate queda afuera, y está bien</h3>
+      <p>Cafayate está a <strong>380 km y 4h50 de manejo desde Tilcara</strong>, en la dirección exactamente opuesta. Meterlo significaría dos días de auto para dos degustaciones. No entra.</p>
+      <p><strong>El vino se recupera sin salir de la Quebrada, y sale mejor.</strong> Jujuy tiene una ruta del vino oficial de extrema altura con veinte establecimientos, dieciséis en la Quebrada. Son bodegas chicas donde te atiende el dueño, con viñedos a 2.500 y 3.300 metros — bastante más interesante que una degustación industrial. El último día se hace en <strong>Kindgard, en Purmamarca</strong>, que además queda sobre la ruta al aeropuerto: cero desvío.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAPA ============ -->
+<section id="mapa">
+  <div class="container">
+    <span class="section-eyebrow">La geografía</span>
+    <h2 class="section-title">Todo a menos de <em>45 minutos</em></h2>
+    <p class="section-lead">Tilcara queda en el medio exacto de la Quebrada. Ese es el argumento entero de la base.</p>
+    <div id="map"></div>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Tramo</th><th class="num">Km</th><th class="num">Tiempo</th><th>Ruta y nota</th></tr></thead>
+      <tbody>
+        <tr class="sect-row"><td colspan="4">Traslados de llegada y salida</td></tr>
+        <tr><td>Aeropuerto Salta → Tilcara</td><td class="num">205</td><td class="num">2h30</td><td>RN 9 · <strong>sólo de día</strong> · puntos negros en Huichaira km 1.772 y Bordo Sococha km 1.776</td></tr>
+        <tr class="sect-row"><td colspan="4">Desde la base en Tilcara</td></tr>
+        <tr><td>Tilcara → Maimará</td><td class="num">7</td><td class="num">10 min</td><td>Bodega Dupont y bajada del Cerro Negro</td></tr>
+        <tr><td>Tilcara → Purmamarca</td><td class="num">26</td><td class="num">19 min</td><td>RN 9 · Bodega Kindgard y Cerro de los Siete Colores</td></tr>
+        <tr><td><strong>Purmamarca → Aeropuerto Salta</strong></td><td class="num">179<br>+10</td><td class="num">2h14<br>+20 min</td><td>El tramo del martes después de la bodega. <strong>2h35 en total</strong></td></tr>
+        <tr><td>Tilcara → Uquía</td><td class="num">44</td><td class="num">40 min</td><td>Bajada de los Diablos</td></tr>
+        <tr><td>Tilcara → Humahuaca</td><td class="num">45</td><td class="num">45 min</td><td>RN 9</td></tr>
+        <tr><td>Tilcara → Salinas Grandes</td><td class="num">90</td><td class="num">1h50</td><td>Vía Purmamarca y la Cuesta de Lipán · sube a 4.170 m</td></tr>
+        <tr><td>Humahuaca → Hornocal</td><td class="num">25</td><td class="num">45 min</td><td>RP 73 · <strong>todo ripio</strong>, últimos 3 km de una sola mano</td></tr>
+        <tr class="dim"><td>Tilcara → Cafayate</td><td class="num">380</td><td class="num">4h50</td><td>Descartado. Dirección opuesta</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:13px;color:var(--tinta-mute);margin-top:-8px">Ninguno de estos tramos tiene peaje. Con el Fiat Cronos a 8,3 l/100km, el tramo aeropuerto → Tilcara son unos <strong>17 litros por auto (~ARS 39.000)</strong>. El viaje completo da cerca de <strong>900 km por auto</strong>, que es lo que está presupuestado.</p>
+  </div>
+</section>
+
+<!-- ============ LA CASA ============ -->
+<section class="alt" id="dormir">
+  <div class="container">
+    <span class="section-eyebrow">Ya está agarrada</span>
+    <h2 class="section-title">La <em>casa</em></h2>
+    <p class="section-lead">Era el cuello de botella real del viaje. Está reservada — falta que la confirmen por escrito.</p>
+
+    <div class="hl win">
+      <span class="badge b-win">Reservada · pendiente de confirmación</span>
+      <h3>Casa en Tilcara · USD 1.584,25 las cuatro noches</h3>
+      <div class="pill-row" style="margin:14px 0">
+        <span class="pill"><b>Total grupo</b> USD 1.584,25 · ARS 2.447.666</span>
+        <span class="pill"><b>Por persona</b> USD 158,43 · ARS 244.767</span>
+        <span class="pill"><b>Por noche, grupo</b> USD 396 · ARS 611.917</span>
+        <span class="pill"><b>Por persona por noche</b> USD 39,61</span>
+      </div>
+      <p>Cae en la banda alta de lo que había estimado ($400.000–600.000 la noche para los diez en carnaval), lo cual es exactamente lo esperable para Tilcara en el fin de semana del desentierro. <strong>USD 39,61 por cabeza por noche en el pueblo más demandado del país en su semana más demandada es un precio razonable.</strong></p>
+      <p style="margin-top:12px"><strong>Que esté en dólares juega a favor:</strong> el resto del presupuesto está en pesos y se va a licuar con la inflación hasta febrero. Este ítem ya quedó clavado.</p>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Hasta que no llegue la confirmación</span>
+      <h3>No solten las alternativas</h3>
+      <p>Tilcara cerró el carnaval 2026 con <strong>98,9% de ocupación</strong> — la provincia tiene 13.732 plazas para 45.715 visitantes, así que sobró aproximadamente una de cada cien camas del pueblo. Y el inventario de diez plazas juntas en toda la Quebrada se cuenta con los dedos de una mano: en Humahuaca no hay una sola publicada.</p>
+      <p><strong>Si esta reserva se cae, no hay plan B improvisable.</strong> Mantené el hilo abierto con dos o tres de las opciones de abajo hasta tener la confirmación por escrito, y ahí sí las liberás.</p>
+      <p style="margin-top:12px">Dos cosas concretas mientras tanto: <strong>pedí la confirmación por escrito con el monto, las fechas y la cantidad de personas</strong>, y <strong>declará que son diez tipos en una despedida</strong>. Varios avisos de la zona prohíben fiestas y hay antecedentes de gente rebotada en el check-in. Mejor discutirlo ahora que con las valijas en la vereda.</p>
+    </div>
+
+    <p style="font-size:13px;color:var(--tinta-mute);margin:26px 0 -10px;text-transform:uppercase;letter-spacing:1.4px;font-weight:700">Alternativas · mantener vivas hasta la confirmación</p>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Propiedad</th><th>Dónde</th><th class="num">Plazas</th><th class="num">Precio publicado</th><th>Contacto y comentario</th></tr></thead>
+      <tbody>
+        <tr class="best">
+          <td><strong>🥇 Cabañas del Sococha</strong></td>
+          <td>Villa Florida<br>3 km de Tilcara</td>
+          <td class="num">3+6+8<br>= 17</td>
+          <td class="num">La de 8 desde<br><strong>$60.000</strong>/día<br><span style="font-size:12px;color:var(--tinta-mute)">tarifa normal</span></td>
+          <td><strong>El mejor fit para lo que van a hacer.</strong> Complejo de 3 cabañas con pileta, parrilla en cada una y predio propio. Tomando las de 8 y 3 entran los diez; tomando el complejo entero no hay vecinos que molestar. <strong>WhatsApp +54 9 2945 52-5307</strong> · IG @tilcaracabanas<br><span style="color:var(--arcilla)">⚠ Hay una reseña de 2024 sobre otra propiedad de la misma anfitriona por sobreventa. Seña con comprobante y confirmación por escrito 15 días antes.</span></td>
+        </tr>
+        <tr>
+          <td><strong>🥈 Sumalagua</strong></td>
+          <td>Tilcara<br>en el pueblo</td>
+          <td class="num">10</td>
+          <td class="num"><strong>$120.000<br>a $150.000</strong>/día<br><span style="font-size:12px;color:var(--tinta-mute)">tarifa normal</span></td>
+          <td>La única propiedad de la Quebrada de 10 plazas con precio a la vista. <strong>4 habitaciones y 4 baños</strong> — el mejor ratio que encontré. Jardín, parrilla, garage. Aviso vigente a abril 2026, anfitrión verificado.<br><span style="color:var(--arcilla)">⚠ Se vende como lugar de silencio y descanso. Avisen qué grupo son antes de señar.</span></td>
+        </tr>
+        <tr>
+          <td><strong>🥉 Hostería La Granja</strong></td>
+          <td>Huacalera<br>sobre RN 9</td>
+          <td class="num">7 hab.</td>
+          <td class="num">s/d</td>
+          <td>Casona de campo de 120 años en <strong>3 hectáreas de quintas y arboledas</strong>. Si la dan entera, es intocable en términos de ruido. <strong>(0388) 426-1766</strong> · hosterialagranja@hotmail.com<br><span style="color:var(--arcilla)">⚠ Una fuente indica que sólo acepta efectivo. Y están a 12 km de Tilcara.</span></td>
+        </tr>
+        <tr>
+          <td>Cabañas Malka<br><span style="font-size:12.5px;color:var(--tinta-mute)">cabaña "Encuentro"</span></td>
+          <td>San Martín 129<br>Tilcara</td>
+          <td class="num">11</td>
+          <td class="num">s/d</td>
+          <td>La única unidad individual de 11 plazas de la Quebrada: 3 habitaciones, 3 baños, quincho privado, a 5 cuadras de la plaza. <strong>+54 9 388 433-7956</strong> · malkatilcara@gmail.com<br><span style="color:var(--arcilla)">⚠ El predio es de yoga, masajes y retiros espirituales. Choca de frente con el grupo. Y el acceso es una subida empinada con escalones — pensalo a las 5 AM.</span></td>
+        </tr>
+        <tr>
+          <td>Hostería Maimará</td>
+          <td>Maimará<br>7 km de Tilcara</td>
+          <td class="num">10</td>
+          <td class="num">s/d</td>
+          <td>5 habitaciones con 5 baños, hostería 2 estrellas con habilitación municipal. Se toma entera. <strong>+54 9 388 517-3483</strong> · hosteriamaimara@gmail.com</td>
+        </tr>
+        <tr>
+          <td>Villa La Tasca</td>
+          <td>Maimará</td>
+          <td class="num">varias<br>unidades</td>
+          <td class="num">s/d</td>
+          <td>Complejo turístico, 4,7 de puntaje con 30 valoraciones. <strong>+54 9 388 472-2632</strong></td>
+        </tr>
+        <tr>
+          <td>Cabañas Cerro Gral. San Martín</td>
+          <td>Maimará</td>
+          <td class="num">unidades<br>de 2-6</td>
+          <td class="num">desde<br>$80.000/día</td>
+          <td>4,4 con 56 valoraciones. Tomando dos unidades entran los diez. <strong>+54 9 388 336-5948</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="grid g2">
+      <div class="card t3">
+        <div class="card-icon">🏡</div>
+        <div class="card-label">Por qué Tilcara es la base correcta</div>
+        <div class="card-value">474 metros</div>
+        <p class="card-sub">Es lo que se baja durmiendo en Tilcara (2.465 m) en vez de Humahuaca (2.939 m), cuatro noches seguidas de fiesta. <strong>Es la mejor decisión de salud del viaje y no cuesta un peso.</strong></p>
+        <p class="card-sub" style="margin-top:10px">Además Tilcara tiene el carnaval con más comparsas de la Quebrada, y en Humahuaca no hay una sola casa de diez plazas publicada. Y queda en el medio geográfico: todos los pueblos del carnaval a menos de 45 minutos.</p>
+      </div>
+      <div class="card t4">
+        <div class="card-icon">🚩</div>
+        <div class="card-label">Antes de dar la reserva por cerrada</div>
+        <ul class="clean" style="margin-top:6px">
+          <li><strong>Confirmación por escrito</strong> con monto, fechas y cantidad de personas. Sin eso, no está reservado.</li>
+          <li><strong>Declarar que son diez en una despedida.</strong> Varios avisos de la zona dicen "no fiestas ni eventos" y hay antecedentes de gente rebotada en el check-in. Mejor discutirlo ahora.</li>
+          <li><strong>Seña por transferencia con comprobante.</strong> Nada de alias personales de Instagram.</li>
+          <li><strong>Reconfirmar a mediados de enero.</strong> En carnaval la sobreventa es un riesgo real y documentado.</li>
+          <li><strong>Ojo con las estafas:</strong> en febrero de 2026 hubo denuncias de alquileres falsos en Humahuaca donde el estafador usaba videos reales de las propiedades y presionaba con "congelar la reserva ante la alta demanda".</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RUEDAS ============ -->
+<section id="ruedas">
+  <div class="container">
+    <span class="section-eyebrow">Moverse</span>
+    <h2 class="section-title">Las <em>ruedas</em></h2>
+    <p class="section-lead">Con la base en la Quebrada el auto pasa de cómodo a imprescindible: los traslados desde el aeropuerto son 2h30 por lado y las casas de afuera del pueblo no tienen colectivo.</p>
+
+    <div class="grid g2">
+      <div class="card t3">
+        <div class="card-icon">🚙</div>
+        <div class="card-label">La decisión</div>
+        <div class="card-value">2 × Fiat Cronos AT</div>
+        <p class="card-sub"><strong>USD 275,11 cada uno</strong> por todo el período, tarifa estándar. Automáticos, 8,3 l/100km. Los dos suman <strong>USD 550,22</strong> — a repartir entre todos, así que es de los rubros que más se abaratan cuanta más gente va.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Ojo con los dos límites del vehículo:</strong> son <strong>5 asientos y 3 valijas</strong> por auto. Con dos autos hay 10 lugares exactos y 6 valijas para 10 personas — mochila de mano o se despacha poco. Y a partir de la persona 11 hace falta un tercer auto.</p>
+        <p class="card-sub" style="margin-top:10px">Dos vehículos en vez de una van también dan redundancia si uno falla en el ripio del Hornocal, y flexibilidad para que el grupo se parta. Las combis de 12 a 19 asientos van casi siempre <em>con chofer</em>, porque transportar pasajeros requiere licencia profesional clase D que ninguno tiene.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Requisito que traba reservas:</strong> tarjeta de crédito internacional del conductor con margen para bloquear la franquicia completa. Sin margen, no entregan el auto. Varias agencias piden 25 años mínimo.</p>
+      </div>
+
+      <div class="card t4">
+        <div class="card-icon">🍺</div>
+        <div class="card-label">La regla</div>
+        <div class="card-value">Alcohol cero</div>
+        <p class="card-sub">Salta y Jujuy tienen <strong>alcohol cero</strong> — cualquier graduación es multa — y durante el carnaval hay operativo reforzado de controles vehiculares y alcoholemia en rutas y accesos.</p>
+        <p class="card-sub" style="margin-top:10px">Tres salidas requieren conductor sobrio designado o chofer contratado: <strong>el sábado del desentierro</strong> (Uquía y Humahuaca, con todos tomando desde el mediodía), <strong>el domingo de Salinas</strong> por la altura, y <strong>el martes del viñedo</strong>, que además termina con 179 km hasta el aeropuerto. Rotar el designado.</p>
+        <p class="card-sub" style="margin-top:10px">Si la casa queda afuera del pueblo, presupuesten <strong>remises de madrugada</strong>, que en carnaval con demanda pico salen caro. Coordinar el remisero de antemano, no a las 4 AM buscando señal.</p>
+      </div>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Rutas · febrero</span>
+      <h3>Se maneja de mañana. Punto.</h3>
+      <ul class="clean warn">
+        <li><strong>Nunca de noche por la RN 9.</strong> La policía provincial de Jujuy lo pide explícitamente. Puntos negros de Vialidad: arroyo Huichaira km 1.772, Bordo Sococha km 1.776, Quebrada de Hornillos km 1.760. Hay antecedentes de corte total por crecidas del Río Grande. <strong>Por eso el vuelo de ida es el del mediodía y el martes se sale de la bodega a las 16:30.</strong></li>
+        <li><strong>Las crecidas son de tarde-noche</strong>, entre las 15 y las 3 AM, y duran de 2 a 6 horas. Febrero es el mes más lluvioso en Jujuy con 188 mm y 13 días de lluvia.</li>
+        <li><strong>La Cuesta de Lipán y el Hornocal, de mañana y volviendo antes de las 16.</strong> Nunca con alerta meteorológica vigente.</li>
+        <li><strong>El Hornocal se consulta antes de subir.</strong> Con lluvia el ripio de la RP 73 queda intransitable. Preguntar en Humahuaca: turismo, estación de servicio o policía.</li>
+        <li><strong>Los dos autos van siempre juntos.</strong> No hay señal en varios tramos.</li>
+        <li><strong>Margen para el vuelo de vuelta.</strong> Salir de la bodega 16:30 para un vuelo de las 22:46 deja casi cuatro horas de colchón y parece exagerado. No lo es: un corte de ruta de cuatro horas en la Quebrada es un evento normal en febrero, no una desgracia excepcional.</li>
+      </ul>
+      <div class="pill-row" style="margin-top:16px">
+        <span class="pill"><b>Emergencias en ruta</b> 140</span>
+        <span class="pill"><b>Vialidad Jujuy</b> 388 422-1281</span>
+        <span class="pill"><b>Defensa Civil Jujuy</b> 103</span>
+        <span class="pill"><b>Defensa Civil WhatsApp</b> 388 445-9916</span>
+        <span class="pill"><b>Vialidad Salta</b> 0387 431-0994</span>
+      </div>
+      <p style="font-size:13.5px;margin-top:14px;color:var(--tinta-soft)">Estado de rutas en vivo: <a href="https://www.vialidadsalta.gob.ar/estados-de-rutas.php">vialidadsalta.gob.ar</a> · <a href="https://www.argentina.gob.ar/transporte/vialidad-nacional/estado-de-rutas">Vialidad Nacional</a> · alertas <a href="https://www.smn.gob.ar/alertas">smn.gob.ar</a>. <strong>La web de Vialidad Jujuy está congelada desde enero de 2024, no la usen.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRESUPUESTO ============ -->
+<section class="alt" id="presupuesto">
+  <div class="container">
+    <span class="section-eyebrow">La plata</span>
+    <h2 class="section-title">El <em>presupuesto</em></h2>
+    <p class="section-lead">Calculadora en vivo. Cambiá cuántos son y todo se recalcula, incluida la cantidad de autos. <strong>Rodri no paga</strong>: su parte se reparte entre los demás. Asume que todos toman el vuelo de las 12:50 — el que necesite el nocturno se banca su pasaje y su hotel por fuera. Precios de agosto de 2026: en febrero de 2027 los pesos van a ser más altos por inflación, así que la referencia estable es el dólar (ARS 1.545).</p>
+
+    <div class="calc-controls">
+      <div class="ctrl">
+        <label for="nPers">¿Cuántos van?</label>
+        <select id="nPers">
+          <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+          <option selected>10</option><option>11</option><option>12</option><option>13</option>
+          <option>14</option><option>15</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Modo</label>
+        <div class="seg">
+          <button class="seg-btn active" data-modo="aus">Austero</button>
+          <button class="seg-btn" data-modo="com">Cómodo</button>
+        </div>
+      </div>
+      <div class="ctrl">
+        <label for="mimosas">Mimosas · ARS por persona <span style="font-weight:400;text-transform:none;letter-spacing:0">(lo define Jano)</span></label>
+        <input type="number" id="mimosas" value="0" min="0" step="10000" placeholder="0">
+      </div>
+    </div>
+
+    <div class="calc-hero">
+      <div class="ch-main">
+        <div class="ch-label">Paga cada uno</div>
+        <div class="ch-num" id="porPagador">—</div>
+        <div class="ch-usd" id="porPagadorUsd">—</div>
+      </div>
+      <div class="ch-side">
+        <div class="ch-item"><span class="ch-k">Total del viaje</span><span class="ch-v" id="totalGrupo">—</span></div>
+        <div class="ch-item"><span class="ch-k">Pagan</span><span class="ch-v" id="cantPagan">—</span></div>
+        <div class="ch-item"><span class="ch-k">Autos necesarios</span><span class="ch-v" id="cantAutos">—</span></div>
+        <div class="ch-item"><span class="ch-k">Recargo por bancar a Rodri</span><span class="ch-v" id="recargoRodri">—</span></div>
+      </div>
+    </div>
+
+    <div id="avisos"></div>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Rubro</th><th>Cómo escala</th><th class="num">Total del grupo</th><th class="num">Por pagador</th></tr></thead>
+      <tbody id="filas"></tbody>
+    </table>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Cómo leer esto</span>
+      <h3>Hay dos tipos de gasto y se comportan al revés</h3>
+      <p><strong>Los que escalan por cabeza</strong> —vuelo, comida, carnaval, caramelos, mimosas— no cambian por persona si son más o menos. Sumar gente no los abarata.</p>
+      <p><strong>Los fijos del grupo</strong> —la casa y los autos— se dividen entre todos. Ahí sí, cuanta más gente, más barato le sale a cada uno. Por eso ir de cinco es dramáticamente más caro que ir de diez: la casa cuesta lo mismo.</p>
+      <p style="margin-top:12px"><strong>Y hay un escalón:</strong> los autos tienen 5 asientos, así que a partir de la persona número 11 hace falta un tercero. Sumar el pasajero 11 <em>encarece</em> a todos en vez de abaratarlos. Si están cerca de ese número, o se quedan en 10 o conviene saltar directo a 13-14 para diluir el auto extra.</p>
+    </div>
+
+    <div class="grid g4">
+      <div class="card">
+        <div class="card-label">Ahorro Salta vs Jujuy</div>
+        <div class="card-value">745.037</div>
+        <p class="card-sub">Pesos por cabeza que se ahorran volando a Salta en lugar de Jujuy. A cambio de 3 horas de ruta.</p>
+      </div>
+      <div class="card t2">
+        <div class="card-label">Efectivo obligatorio</div>
+        <div class="card-value">En mano</div>
+        <p class="card-sub">En la Quebrada casi no hay cajeros y la señal se cae por saturación durante el carnaval. Suban con plata física para los cuatro días.</p>
+      </div>
+      <div class="card t3">
+        <div class="card-label">Pendiente · Jano</div>
+        <div class="card-value">Mimosas</div>
+        <p class="card-sub">Cargalo arriba y el total se actualiza solo. Mientras esté en cero, el número que ves es un piso.</p>
+      </div>
+      <div class="card t4">
+        <div class="card-label">Costo oculto</div>
+        <div class="card-value">Estacionar</div>
+        <p class="card-sub">Hay denuncias de ARS 3.000 por 20 minutos en Tilcara durante el carnaval. Y remises de madrugada si la casa queda afuera del pueblo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESERVAS ============ -->
+<section id="reservas">
+  <div class="container">
+    <span class="section-eyebrow">Acción</span>
+    <h2 class="section-title">Qué hay que <em>cerrar</em> y cuándo</h2>
+    <p class="section-lead">Estamos a casi seis meses del viaje. Suena lejos y no lo es: <strong>las tres primeras son para esta semana</strong>.</p>
+
+    <div class="tl">
+      <div class="tl-item urgent">
+        <div class="tl-when">Ahora · esperando respuesta</div>
+        <h4>Confirmación de la casa de Tilcara</h4>
+        <p>USD 1.584,25 reservados, todavía sin confirmar. Pedir la confirmación <strong>por escrito</strong> con monto, fechas y cantidad de personas, y declarar que son diez en una despedida. Hasta que llegue, no soltar a Sococha, Sumalagua ni La Granja.</p>
+      </div>
+      <div class="tl-item urgent">
+        <div class="tl-when">Esta semana · agosto 2026</div>
+        <h4>Los pasajes</h4>
+        <p>Aerolíneas AEP 12:50 del viernes 5 + JetSMART SLA 22:46 del martes 9, los dos directos. Todos el mismo día, porque las low cost venden por cupos. Despegar no permite comprar 10 juntos, así que van directo por las webs de las aerolíneas o en dos operaciones.</p>
+        <p style="margin-top:8px;color:var(--turquesa)"><strong>Primero definir quién no llega al del mediodía.</strong> Ese o esos toman el JetSMART de las 21:05 y se lo compran ellos, junto con su noche de hotel en Salta.</p>
+      </div>
+      <div class="tl-item urgent">
+        <div class="tl-when">Esta semana · agosto 2026</div>
+        <h4>El turno de Bodega Kindgard</h4>
+        <p>WhatsApp <strong>+54 9 388 409-1595</strong>. El cupo por turno es de exactamente 10 personas, así que ocupan uno entero: si otro grupo lo reserva primero, quedan afuera. Confirmar también que abren el martes 9 (feriado) y el precio a febrero 2027.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Cuando pueda · Jano</div>
+        <h4>El monto de las mimosas</h4>
+        <p>Es lo único que falta para tener el presupuesto cerrado. Con eso se puede pasar el número final al grupo y arrancar a juntar la plata.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Noviembre</div>
+        <h4>Los dos autos</h4>
+        <p>KAYAK marca el mejor precio de alquiler a unos 75 días del viaje, o sea fines de noviembre. Confirmar con la rentadora el requisito de edad y el margen de tarjeta de crédito que van a bloquear. Y chequear qué cubre de más la tarifa "Inclusivo" (USD 321,78) contra la Estándar (USD 275,11).</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Diciembre — enero</div>
+        <h4>Chofer del sábado y cena del martes</h4>
+        <p>El chofer o combi para el día del desentierro. Y si además quieren chofer para el martes del viñedo, Turismo Nativo (0388 434-5693) opera justo los martes. La cena del martes 9 en Salta con reserva, que es feriado.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Mediados de enero</div>
+        <h4>Reconfirmar la casa</h4>
+        <p>Tres semanas antes. En carnaval la sobreventa es un riesgo real y documentado en la zona.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-when">Última semana</div>
+        <h4>Compras y chequeo de rutas</h4>
+        <p>Talco, espuma, antiparras, fundas estancas y protector 50+ se compran en Buenos Aires o en Salta, nunca adentro del carnaval. Sacar efectivo para los cuatro días. Y revisar el estado de rutas los días previos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANUAL ============ -->
+<section class="alt" id="manual">
+  <div class="container">
+    <span class="section-eyebrow">Lo que nadie te cuenta</span>
+    <h2 class="section-title">Manual de <em>carnaval</em></h2>
+    <p class="section-lead">El carnaval de la Quebrada no es un desfile que se mira. Es una fiesta ritual en la que te van a meter adentro, y tiene códigos.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <div class="card-icon">😈</div>
+        <div class="card-label">Qué es realmente</div>
+        <div class="card-value">El Pujllay</div>
+        <p class="card-sub">Se desentierra de una apacheta a un muñeco de trapo que quedó enterrado al final del carnaval anterior. <em>Pujllay</em> es "jugar" en quechua — no es el diablo católico, aunque le digan así. El <strong>mojón</strong> es ese montículo de piedras y ofrendas; cada comparsa tiene el suyo en la ladera. "Chayar el mojón" es rociarlo con alcohol, coca y cigarrillos.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>El momento del mojón es espiritual.</strong> Se acompaña en silencio, no se interrumpe y no se usa de set de fotos. Todo lo demás es descontrol.</p>
+      </div>
+
+      <div class="card t2">
+        <div class="card-icon">🎊</div>
+        <div class="card-label">Cómo se entra</div>
+        <div class="card-value">Te meten solos</div>
+        <p class="card-sub">Las comparsas de Tilcara son abiertas: la ficha oficial de patrimonio inmaterial de Los Caprichosos dice textual que reciben a cualquiera aunque no sea del lugar. Acompañar la comparsa por la calle es gratis y nadie te va a dejar afuera — te van a convidar talco, serpentina y chicha.</p>
+        <p class="card-sub" style="margin-top:10px">Distinto es <strong>bajar el cerro disfrazado de diablo</strong>: eso es ser miembro, tener traje y relación previa. Si eso les interesa, hay que escribirle a la comparsa por Instagram con meses de anticipación, no aparecerse el sábado a las tres de la tarde.</p>
+      </div>
+    </div>
+
+    <div class="grid g2">
+      <div class="card t3">
+        <div class="card-icon">🎒</div>
+        <div class="card-label">Qué llevar</div>
+        <div class="card-value">Ropa para tirar</div>
+        <ul class="clean" style="margin-top:6px">
+          <li><strong>Muda completa en el auto.</strong> Van a volver empapados de espuma, harina y pintura</li>
+          <li><strong>Funda estanca o ziploc</strong> para celular y documentos. Se pierden celulares todos los años</li>
+          <li><strong>Zapatillas cerradas.</strong> Nada de ojotas en el barro y el empujón</li>
+          <li><strong>Antiparras</strong> contra la espuma, y anteojos de sol baratos y sacrificables</li>
+          <li><strong>Abrigo para la noche.</strong> Humahuaca hace 28° a las 15 y 6° a las 6 AM</li>
+          <li>Rompevientos impermeable o piloto descartable — con viento el paraguas no sirve</li>
+          <li>Talco, espuma y bebida <strong>comprados el viernes o el sábado temprano</strong></li>
+        </ul>
+      </div>
+
+      <div class="card t4">
+        <div class="card-icon">☀️</div>
+        <div class="card-label">El riesgo subestimado</div>
+        <div class="card-value">El sol</div>
+        <p class="card-sub">Mediciones con radiómetro de la UNSa en la Puna dan <strong>índice UV promedio 16 al mediodía en febrero, con picos de 19,5</strong>. La escala oficial considera "extremo" a partir de 11. Con esos valores, una piel clara se quema en tres o cuatro minutos. Y con cielo semi-nublado el índice sigue en 14: las nubes no salvan.</p>
+        <p class="card-sub" style="margin-top:10px">En Salinas Grandes el reflejo de la sal duplica la exposición. <strong>Protector 50+ reaplicado cada dos horas, labial con FPS, gorro con ala y anteojos con filtro UV real</strong> — la queratitis por sol de altura es una noche entera con los ojos ardiendo.</p>
+      </div>
+    </div>
+
+    <div class="hl warn">
+      <span class="badge b-warn">Altura</span>
+      <h3>El apunamiento se disfraza de resaca</h3>
+      <p>Alrededor del <strong>25% de las personas que suben a 2.500 m</strong> tiene mal de altura, y el porcentaje sube a 40% a los 4.300 m. Los síntomas aparecen entre 6 y 10 horas después y duran uno o dos días: dolor de cabeza, náuseas, falta de apetito, cansancio. El manual MSD lo dice literalmente: <em>los síntomas se pueden confundir con una resaca</em>. En este viaje eso es un problema real de diagnóstico.</p>
+      <div class="pill-row" style="margin-top:14px">
+        <span class="pill">Maimará <b>2.400 m</b></span>
+        <span class="pill">Purmamarca <b>2.192 m</b></span>
+        <span class="pill">Tilcara · base <b>2.465 m</b></span>
+        <span class="pill">Humahuaca <b>2.939 m</b></span>
+        <span class="pill">Salinas Grandes <b>3.450 m</b></span>
+        <span class="pill">Abra de Potrerillos <b>4.170 m</b></span>
+        <span class="pill">Hornocal <b>4.350 m</b></span>
+      </div>
+      <ul class="clean warn" style="margin-top:14px">
+        <li><strong>Lo que importa es la altura a la que dormís</strong>, no la máxima del día. Por eso la base es Tilcara y no Humahuaca: 474 metros menos, cuatro noches seguidas. Es la decisión de salud más barata de todo el viaje.</li>
+        <li><strong>La primera noche es de aclimatación.</strong> Llegan de Buenos Aires, nivel del mar, cero adaptación. Si queman el viernes, el sábado —el desentierro— la van a pasar mal. Con diez personas, la probabilidad de que al menos uno caiga es alta.</li>
+        <li><strong>El CDC recomienda evitar alcohol las primeras 48 horas en altura</strong>, sobre todo antes de dormir. Sé que este consejo va a ser ignorado. Pero que lo sepan.</li>
+        <li><strong>Estar en forma no protege.</strong> No hay correlación entre estado físico y mal de altura.</li>
+        <li><strong>El Hornocal a 4.350 m, nunca con resaca.</strong> Es la altura máxima del viaje y va justo después de la tercera noche.</li>
+        <li>Botiquín: ibuprofeno, paracetamol, sales de rehidratación, hoja o té de coca. Bajar 300 a 1.000 metros resuelve casi todo.</li>
+        <li>Si alguno tiene asma mal controlada, apnea severa, hipertensión descontrolada o un evento cardíaco reciente, que hable con su médico antes. En serio.</li>
+        <li><strong>La chicha es artesanal y de graduación imprevisible</strong>, y en altura pega distinto. Aceptarla cuando te la convidan es parte del código; tomarla como cerveza no.</li>
+      </ul>
+    </div>
+
+    <div class="hl">
+      <span class="badge b-gold">Regla de oro</span>
+      <h3>La única prohibición explícita</h3>
+      <p>Se juega con talco, harina, serpentina, papel picado, espuma y albahaca — la albahaca se reparte, no se tira. Pero <strong>en algunos pueblos está prohibido jugar con pintura y eso se respeta siempre</strong>. En Tilcara se usa; en otros no. Preguntar antes de sacar el aerosol.</p>
+      <p style="margin-top:10px">Y entre ustedes: con diez tipos tomando desde las once de la mañana a 2.500 metros durante cuatro días, <strong>tengan armado quién cuida a quién</strong>. Un par de duplas fijas, celulares cargados y un punto de encuentro por si se corta la señal — que se va a cortar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AGENDA ============ -->
+<section id="agenda">
+  <div class="container">
+    <span class="section-eyebrow">La libreta</span>
+    <h2 class="section-title">Agenda de <em>contactos</em></h2>
+    <p class="section-lead">Todo verificado en agosto de 2026. Los precios sin fecha son de referencia y hay que reconfirmarlos.</p>
+
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Qué</th><th>Dónde</th><th>Contacto</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr class="sect-row"><td colspan="4">Casa · llamar esta semana</td></tr>
+        <tr><td><strong>Cabañas del Sococha</strong></td><td>Villa Florida, 3 km de Tilcara</td><td>+54 9 2945 52-5307<br>IG @tilcaracabanas</td><td>Complejo de 3 cabañas (3+6+8), pileta, parrillas, predio propio. Se llega sólo en vehículo</td></tr>
+        <tr><td><strong>Sumalagua</strong></td><td>Tilcara, en el pueblo</td><td>vía parairnos.com<br><span style="font-size:12.5px;color:var(--tinta-mute)">tel. empieza 388-58…</span></td><td>10 personas, 4 hab, 4 baños. $120-150k/día tarifa normal</td></tr>
+        <tr><td><strong>Hostería La Granja</strong></td><td>Huacalera, sobre RN 9</td><td>(0388) 426-1766<br>hosterialagranja@hotmail.com</td><td>Casona de 120 años, 7 hab, 3 hectáreas. Verificar si aceptan sólo efectivo</td></tr>
+        <tr><td>Cabañas Malka</td><td>San Martín 129, Tilcara</td><td>+54 9 388 433-7956<br>malkatilcara@gmail.com</td><td>Cabaña "Encuentro", 11 plazas, 3 baños, quincho. Predio de retiros</td></tr>
+        <tr><td>Hostería Maimará</td><td>Maimará</td><td>+54 9 388 517-3483<br>hosteriamaimara@gmail.com</td><td>10 plazas, 5 hab, 5 baños. Habilitación municipal</td></tr>
+        <tr><td>Villa La Tasca</td><td>Maimará</td><td>+54 9 388 472-2632</td><td>Complejo turístico, 4,7 con 30 valoraciones</td></tr>
+        <tr><td>Cabañas Cerro Gral. San Martín</td><td>Maimará</td><td>+54 9 388 336-5948</td><td>Desde $80.000/día por unidad de 2-6</td></tr>
+        <tr><td>Balcones del Pintor</td><td>Maimará</td><td>+54 9 388 475-8109</td><td>Alternativa</td></tr>
+        <tr><td>Hospedaje Sol Naciente</td><td>Humahuaca</td><td>(3884) 555999</td><td>Deptos de 2 a 8, quincho y terraza mirador. Acepta grupos de jóvenes</td></tr>
+
+        <tr class="sect-row"><td colspan="4">Vino de altura · ruta del vino de Jujuy</td></tr>
+        <tr class="best"><td><strong>🍷 Bodega Kindgard</strong><br><span style="font-size:12px;color:var(--cardon);font-weight:700;text-transform:uppercase;letter-spacing:1px">el viñedo del martes 9</span></td><td>RN 9 km 1739<br>Purmamarca</td><td><strong>WhatsApp +54 9 388 409-1595</strong><br>bodega.kindgard@gmail.com<br>IG @bodegakindgard</td><td><strong>Abre todos los días</strong>, visitas 11:30 a 16:30. <strong>ARS 35.000 pp</strong>: 4 etiquetas + picada con quesos y conservas. Tiene restaurante. <strong>Cupo de exactamente 10 por turno</strong> — reservar apenas se confirme el viaje o se lo lleva otro grupo. Reserva online en bodegakindgard.com</td></tr>
+        <tr><td>Huichaira Vineyards</td><td>RN 9 km 95<br>Tilcara · 5 km</td><td>+54 9 388 740-0395<br>WhatsApp Luz Morcillo<br>+54 9 388 404-7945</td><td>Lun a vie 10-18, sáb 10-17, con cita. <strong>La opción si prefieren el viñedo el lunes 8.</strong> Tiene almuerzo gourmet de 3 pasos para grupos de 4+. Seña del 30% por transferencia. Precio no publicado, preguntar</td></tr>
+        <tr><td>Viñas del Perchel</td><td>RN 9 km 101<br>Huacalera · ~15 km</td><td>+54 0388 579-4607<br>info@vinasdelperchel.com</td><td><strong>Lunes a domingo 8 a 18</strong>, el horario más amplio de la Quebrada. Buen comodín si Kindgard no tiene lugar. Sus vinos son la línea "Runa"</td></tr>
+        <tr><td>Bodega Fernando Dupont</td><td>RN 9 km 1776<br>Maimará · 7 km</td><td>+54 9 388 473-1918<br>info@bodegafernandodupont.com<br>IG @bodegadupont</td><td>Lun a sáb 9 a 18 con reserva. <strong>Cerrada los domingos.</strong> Guía bilingüe, degustación con bocaditos.<br><span style="color:var(--arcilla)">⚠ Para llegar se cruza el lecho del río Grande — preguntar por el estado del vado, febrero es temporada de crecidas. La web oficial está caída</span></td></tr>
+        <tr><td>Viñas de Uquía · Qisa</td><td>RN 9 km 1799<br>Uquía · ~32 km</td><td>+54 9 3885 20-2240<br>IG @vinasdeuquia</td><td>Lun a vie con cita. Su <strong>Cava Mina Moya</strong> es un socavón minero a 3.640 m reconvertido en cava, con expedición en 4x4 — la experiencia más impactante del circuito, pero termina 14:00 y necesita varios vehículos. Viñedos a 3.329 m</td></tr>
+        <tr class="dim"><td>El Bayeh y Casa Mocha</td><td>Maimará y Huacalera</td><td>bodegaelbayeh.com.ar</td><td>Las más completas del circuito, pero abren <strong>vie a dom</strong> y <strong>mié a dom</strong>. Cerradas lunes y martes: sólo entran si las mueven al sábado 6 o domingo 7</td></tr>
+        <tr><td>Turismo Nativo <span style="color:var(--tinta-mute)">· ruta del vino con chofer</span></td><td>Belgrano esq. Benedetti<br>Tilcara</td><td>0388 434-5693<br>reservas@turismonativo.com</td><td>2-3 bodegas, 6 h, transporte con chofer y guía, entradas y degustaciones. <strong>Sale martes, jueves y sábados</strong> — justo el día del plan. Beneficios para grupos. Resuelve el problema de quién maneja</td></tr>
+
+        <tr class="sect-row"><td colspan="4">Cena del martes 9 en Salta · antes del vuelo</td></tr>
+        <tr><td><strong>El Charrúa</strong> <span style="color:var(--tinta-mute)">· parrilla</span></td><td>Caseros 221</td><td>+54 387 432-1859</td><td><strong>La opción realista.</strong> Abre hasta las 06:00, así que no hay riesgo de horario con el vuelo de las 22:46</td></tr>
+        <tr><td>Doña Salta <span style="color:var(--tinta-mute)">· regional</span></td><td>Córdoba 46</td><td>0387 432-1921</td><td>Empanadas, locro, tamales. Cierra 24:00</td></tr>
+        <tr class="dim"><td>Peñas de Balcarce</td><td>La Panadería del Chuña (446)<br>La Casona del Molino<br>Chaqueño Palavecino (935)</td><td>0387 431-2896<br>0387 434-2835<br>0387 403-0735</td><td><strong>No entran con este vuelo:</strong> los shows arrancan 21:30 y el avión sale 22:46. Sólo si cambian al vuelo de Aerolíneas de las 19:00 y sacrifican el viñedo — o si alguna vez mueven el viaje un día</td></tr>
+
+        <tr class="sect-row"><td colspan="4">Transporte</td></tr>
+        <tr><td><strong>Alquiler de autos</strong></td><td>Aeropuerto Güemes, Salta</td><td>Hertz, Alamo, Avis, Localiza, Europcar</td><td><strong>2 × Fiat Cronos AT (Standard 4/5 Door) · USD 275,11 c/u</strong> por el período, tarifa estándar. 5 asientos y 3 valijas cada uno, 8,3 l/100km. La tarifa "Inclusivo" sale USD 321,78 — vale preguntar qué cubre de más antes de descartarla</td></tr>
+        <tr><td>Combis con chofer</td><td>saltaguia.com.ar</td><td>+54 9 387 683-9447</td><td>15 y 19 asientos con papeles CNRT. Piden reserva con 30 días</td></tr>
+        <tr><td>Esencial Turismo <span style="color:var(--tinta-mute)">· EVT 15.635</span></td><td>Salta</td><td>+54 9 387 683-8396</td><td>Minivan hasta 19 o minibús hasta 22. Sección de grupos</td></tr>
+        <tr><td>Turismo La Quebrada</td><td>Buenos Aires 39, Salta</td><td>+54 9 387 227-3942</td><td>Tarifario público: Humahuaca + Hornocal $96.000 · Salinas Grandes $57.000</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="quote">
+      El carnaval de la Quebrada no se mira desde la vereda. A los diez minutos tenés talco en el pelo, una copa de chicha en la mano y una señora de ochenta años explicándote por qué su comparsa es mejor que la del pueblo de al lado.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="f-title">Despedida de Rodri</div>
+    <p style="font-size:15px;color:#b6c2c8">Quebrada de Humahuaca · 5 al 9 de febrero de 2027</p>
+    <p class="f-meta">
+      Versión 3.2 · actualizada el 18 de agosto de 2026 · revisión integral de todas las secciones<br>
+      <strong style="color:var(--ocre)">Cambios de esta versión:</strong> <strong>sólo vuelos directos</strong>, se descartó la escala en Mendoza · el vuelo queda igual en los dos modos ($344.163) · el JetSMART de las 21:05 vuelve como <strong>opción individual autofinanciada</strong> para quien no llegue al del mediodía · nafta recalculada con el consumo real del Cronos · corregidas referencias cruzadas que habían quedado viejas: la bajada del martes ahora sale de la bodega 16:30 y no de Tilcara 14:00, el traslado del aeropuerto son 205 km, y las secciones de la casa y el timeline ya no piden reservar algo que está reservado<br>
+      <span style="color:#6f7f88">v3.1 · fix del vuelo austero que tiraba una noche paga de la casa · v3.0 · Presupuesto como calculadora en vivo de 5 a 15 personas, Rodri no paga, precio real de los autos · v2.2 · viñedo el último día en Kindgard · v2.1 · casa reservada</span><br>
+      <span style="color:#6f7f88">v2.2 · viñedo el último día en Bodega Kindgard · corregido: Dupont cierra domingos · v2.1 · casa de Tilcara reservada por USD 1.584,25 · v2.0 · base mudada a Tilcara y vuelos con precios reales de Despegar</span><br>
+      Fechas de carnaval confirmadas por la Secretaría de Turismo y Cultura de Jujuy · Precios de vuelos: Despegar, 18-ago-2026, precio final con impuestos · Precios en pesos sujetos a inflación, la referencia estable es el dólar
+    </p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ===== CALCULADORA DE PRESUPUESTO ===== */
+(function(){
+  var R = 1545;                      // ARS por USD
+  var CASA_USD = 1584.25;            // reservada, total del grupo, 4 noches
+  var AUTO_USD = 275.11;             // Fiat Cronos AT, tarifa estandar, por el periodo
+  var NAFTA_AUTO = 180000;           // ARS por auto: ~900 km a 8,3 l/100km
+  var ASIENTOS = 5;                  // por auto
+  var CAMAS_CASA = 10;               // capacidad de la casa reservada
+  var CHOFER_COM = 900000;           // combi con chofer 2 dias, solo modo comodo
+
+  // costos que escalan por persona (ARS)
+  var PP = [
+    {k:'Vuelo ida y vuelta', aus:344163, com:344163,
+     d:{aus:'Aerolíneas 12:50 + JetSMART 22:46 · los dos directos', com:'Aerolíneas 12:50 + JetSMART 22:46 · los dos directos'}},
+    {k:'Comida y bebida', aus:225000, com:310000,
+     d:{aus:'Parrilla en la casa y mercado', com:'Comer afuera todos los días'}},
+    {k:'Carnaval y actividades', aus:125000, com:260000,
+     d:{aus:'Talco, chicha, fortín y Bodega Kindgard', com:'+ excursiones guiadas y chofer para el vino'}},
+    {k:'Caramelos', aus:100000, com:100000, d:{aus:'Monto fijo por cabeza', com:'Monto fijo por cabeza'}}
+  ];
+
+  var modo = 'aus';
+  var $ = function(id){ return document.getElementById(id); };
+  var fmt = function(n){ return Math.round(n).toLocaleString('es-AR'); };
+  var usd = function(n){ return 'USD ' + Math.round(n/R).toLocaleString('es-AR'); };
+
+  function calc(){
+    var N = parseInt($('nPers').value,10);
+    var mim = parseFloat($('mimosas').value) || 0;
+    var pagan = N - 1;                       // Rodri no paga
+    var autos = Math.ceil(N / ASIENTOS);
+
+    var filas = [], totalGrupo = 0;
+
+    PP.forEach(function(r){
+      var unit = r[modo], tot = unit * N;
+      totalGrupo += tot;
+      filas.push({k:r.k, esc:r.d[modo], tot:tot, cls:'percap'});
+    });
+
+    if (mim > 0){
+      var tm = mim * N; totalGrupo += tm;
+      filas.push({k:'Mimosas', esc:'Monto cargado por Jano', tot:tm, cls:'percap'});
+    }
+
+    var casa = CASA_USD * R; totalGrupo += casa;
+    filas.push({k:'Casa en Tilcara · 4 noches', esc:'USD 1.584,25 el total, reservada', tot:casa, cls:'fijo'});
+
+    var ta = autos * AUTO_USD * R; totalGrupo += ta;
+    filas.push({k:'Alquiler de autos', esc:autos+' × Fiat Cronos AT · USD 275,11 c/u', tot:ta, cls:'fijo'});
+
+    var tn = autos * NAFTA_AUTO; totalGrupo += tn;
+    filas.push({k:'Nafta', esc:'~900 km por auto a 8,3 l/100km', tot:tn, cls:'fijo'});
+
+    if (modo === 'com'){
+      totalGrupo += CHOFER_COM;
+      filas.push({k:'Combi con chofer', esc:'2 días: desentierro y ruta del vino', tot:CHOFER_COM, cls:'fijo'});
+    }
+
+    var porPagador = totalGrupo / pagan;
+    var sinRodri   = totalGrupo / N;
+
+    $('porPagador').textContent    = '$ ' + fmt(porPagador);
+    $('porPagadorUsd').textContent = usd(porPagador) + '  ·  si pagara Rodri serían $ ' + fmt(sinRodri);
+    $('totalGrupo').textContent    = '$ ' + fmt(totalGrupo);
+    $('cantPagan').textContent     = pagan + ' de ' + N;
+    $('cantAutos').textContent     = autos + (autos === 1 ? ' auto' : ' autos') + ' · ' + (autos*ASIENTOS) + ' asientos';
+    $('recargoRodri').textContent  = '+ $ ' + fmt(porPagador - sinRodri);
+
+    var html = '';
+    filas.forEach(function(f){
+      html += '<tr class="'+f.cls+'"><td><strong>'+f.k+'</strong></td><td style="color:var(--tinta-soft);font-size:13.5px">'+f.esc+'</td>'
+           +  '<td class="num">$ '+fmt(f.tot)+'</td><td class="num">$ '+fmt(f.tot/pagan)+'</td></tr>';
+    });
+    html += '<tr class="total"><td>TOTAL</td><td>'+N+' personas · pagan '+pagan+'</td>'
+         +  '<td class="num">$ '+fmt(totalGrupo)+'<br><span style="font-weight:400;font-size:12px">'+usd(totalGrupo)+'</span></td>'
+         +  '<td class="num">$ '+fmt(porPagador)+'<br><span style="font-weight:400;font-size:12px">'+usd(porPagador)+'</span></td></tr>';
+    $('filas').innerHTML = html;
+
+    // avisos contextuales
+    var av = '';
+    if (N > CAMAS_CASA){
+      av += '<div class="aviso rojo"><strong>La casa es para '+CAMAS_CASA+'.</strong> Con '+N+' personas hace falta alojamiento extra y este cálculo no lo incluye — el número real va a ser más alto. Hay que renegociar con el dueño o sumar una segunda propiedad.</div>';
+    } else if (N < CAMAS_CASA){
+      av += '<div class="aviso amar"><strong>La casa se paga igual.</strong> Están reservadas '+CAMAS_CASA+' camas por USD 1.584,25 vayan '+N+' o vayan '+CAMAS_CASA+'. Cada persona que falta encarece a las demás en unos $ '+fmt((CASA_USD*R)/(N-1) - (CASA_USD*R)/CAMAS_CASA)+'.</div>';
+    }
+    if (N === ASIENTOS*autos){
+      av += '<div class="aviso amar"><strong>Los autos van justos.</strong> '+autos+' × '+ASIENTOS+' asientos son exactamente '+N+' lugares, sin margen. Y son 3 valijas por auto: <strong>'+(autos*3)+' valijas para '+N+' personas.</strong> Mochila de mano o se despacha poco.</div>';
+    }
+    if (N === 11 || N === 12){
+      av += '<div class="aviso rojo"><strong>Estás justo pasando el escalón del tercer auto.</strong> Con 10 cada uno paga menos que con 11: sumar la persona 11 obliga a un auto más y encarece a todos. O se quedan en 10, o conviene saltar a 13-14 para diluirlo.</div>';
+    }
+    if (mim === 0){
+      av += '<div class="aviso verde"><strong>Falta el número de Jano.</strong> Las mimosas están en cero, así que este total es un piso y no un techo.</div>';
+    }
+    $('avisos').innerHTML = av;
+  }
+
+  $('nPers').addEventListener('change', calc);
+  $('mimosas').addEventListener('input', calc);
+  $('mimosas').addEventListener('focus', function(){ this.select(); });
+  Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(b){
+    b.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); modo = b.dataset.modo; calc();
+    });
+  });
+  calc();
+})();
+
+/* ===== COUNTDOWN Y MAPA ===== */
+(function(){
+  var target = new Date('2027-02-05T12:50:00-03:00').getTime();
+  var el = document.getElementById('cd');
+  function unit(n,l){return '<div class="cd-unit"><div class="cd-num">'+n+'</div><div class="cd-label">'+l+'</div></div>';}
+  function tick(){
+    var d = target - Date.now();
+    if(d<=0){ el.innerHTML = '<div class="cd-unit"><div class="cd-num">¡Vamos!</div></div>'; return; }
+    var s=Math.floor(d/1000), days=Math.floor(s/86400), h=Math.floor(s%86400/3600), m=Math.floor(s%3600/60), sec=s%60;
+    el.innerHTML = unit(days,'días')+unit(String(h).padStart(2,'0'),'horas')+unit(String(m).padStart(2,'0'),'min')+unit(String(sec).padStart(2,'0'),'seg');
+  }
+  tick(); setInterval(tick,1000);
+
+  var stops = [
+    {n:'TILCARA · LA BASE', c:[-23.577,-65.393], col:'#c2542e', d:'2.465 m · 4 noches · desentierro sáb 6, 11:30 en el Mojón del Matadero'},
+    {n:'Aeropuerto Güemes (SLA)', c:[-24.856,-65.486], col:'#8c3b1e', d:'Llegada vie 5 · 15:05 · salida mar 9 · 22:46 · 2h30 de Tilcara'},
+    {n:'Salta capital', c:[-24.7859,-65.4117], col:'#8c3b1e', d:'Sólo el martes 9 a la tarde: peña de despedida en Balcarce'},
+    {n:'Purmamarca · Bodega Kindgard', c:[-23.745,-65.500], col:'#5f7a4a', d:'2.192 m · 19 min · viñedo del último día, mar 9 · abre todos los días, cupo de 10 · a 2h35 del aeropuerto'},
+    {n:'Salinas Grandes', c:[-23.62,-65.95], col:'#2e7d8a', d:'3.450 m · dom 7 a la mañana por la Cuesta de Lipán (4.170 m)'},
+    {n:'Maimará', c:[-23.626,-65.406], col:'#d9a441', d:'2.400 m · 10 min · bajada del Cerro Negro dom 7 · Bodega Dupont (lun a sáb)'},
+    {n:'Huacalera', c:[-23.44,-65.35], col:'#d9a441', d:'Hostería La Granja · alternativa de alojamiento a 12 km'},
+    {n:'Uquía · Bajada de los Diablos', c:[-23.297,-65.360], col:'#7b4a6e', d:'40 min · sáb 6 a las 16:00 · la más famosa de la Quebrada'},
+    {n:'Humahuaca', c:[-23.205,-65.351], col:'#7b4a6e', d:'2.939 m · 45 min · Topamiento de los Cholos sáb 6, 19:00 · Carnaval Grande lun 8'},
+    {n:'Serranía del Hornocal', c:[-23.170,-65.180], col:'#1f3540', d:'4.350 m · 25 km de ripio · lun 8, sólo si no llovió'}
+  ];
+  var map = L.map('map', {scrollWheelZoom:false}).setView([-23.9,-65.5], 8);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:18
+  }).addTo(map);
+  var bounds = [];
+  stops.forEach(function(s){
+    var isBase = s.n.indexOf('BASE')>-1;
+    L.circleMarker(s.c,{radius:isBase?13:9,fillColor:s.col,color:'#fff',weight:isBase?3.5:2.5,opacity:1,fillOpacity:.93})
+     .addTo(map)
+     .bindPopup('<strong style="font-size:14px">'+s.n+'</strong><br><span style="font-size:12.5px;color:#575d66">'+s.d+'</span>');
+    bounds.push(s.c);
+  });
+  // Traslado aeropuerto (sólo ida y vuelta)
+  L.polyline([[-24.856,-65.486],[-24.7859,-65.4117],[-23.745,-65.500],[-23.626,-65.406],[-23.577,-65.393]],
+    {color:'#8c3b1e',weight:3,opacity:.45,dashArray:'3,8'}).addTo(map);
+  // Eje del carnaval desde la base
+  L.polyline([[-23.577,-65.393],[-23.44,-65.35],[-23.297,-65.360],[-23.205,-65.351],[-23.170,-65.180]],
+    {color:'#7b4a6e',weight:4,opacity:.6,dashArray:'9,7'}).addTo(map);
+  // Salinas
+  L.polyline([[-23.577,-65.393],[-23.745,-65.500],[-23.62,-65.95]],
+    {color:'#2e7d8a',weight:3.5,opacity:.55,dashArray:'9,7'}).addTo(map);
+  map.fitBounds(bounds,{padding:[45,45]});
+})();
+</script>
+</body>
+</html>
