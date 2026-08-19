@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comparativo de destinos · Salta vs Posadas vs Río · Despedida de Rodri</title>
+<title>Comparativo de destinos · Posadas, Corrientes, Salta y Río · Despedida de Rodri</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --salta:#c2542e; --posadas:#2f7d4f; --rio:#1f6f9e;
+    --salta:#c2542e; --posadas:#2f7d4f; --corrientes:#b5851f; --rio:#1f6f9e;
     --ocre:#d9a441; --arcilla:#8c3b1e; --puna:#1f3540;
     --arena:#f6ecdc; --crema:#fcf6ec; --blanco:#fffdf8;
     --tinta:#26292f; --tinta-soft:#575d66; --tinta-mute:#8b9099; --linea:#e8dcc6;
@@ -33,17 +33,17 @@
   .section-title em{font-style:italic;color:var(--arcilla)}
   .section-lead{font-size:16.5px;color:var(--tinta-soft);max-width:780px;margin-bottom:34px}
 
-  .podio{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-bottom:34px}
+  .podio{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px;margin-bottom:34px}
   .dcard{background:var(--blanco);border-radius:20px;box-shadow:var(--sh-card);border-top:5px solid;overflow:hidden}
-  .dcard.s{border-top-color:var(--salta)} .dcard.i{border-top-color:var(--posadas)} .dcard.r{border-top-color:var(--rio)}
+  .dcard.s{border-top-color:var(--salta)} .dcard.i{border-top-color:var(--posadas)} .dcard.c{border-top-color:var(--corrientes)} .dcard.r{border-top-color:var(--rio)}
   .dcard-h{padding:22px 26px 16px}
   .dcard-h .flag{font-size:11px;text-transform:uppercase;letter-spacing:1.6px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;color:#fff}
-  .s .flag{background:var(--salta)} .i .flag{background:var(--posadas)} .r .flag{background:var(--rio)}
-  .dcard-h h3{font-family:'Cormorant Garamond',serif;font-size:29px;color:var(--puna);font-weight:600;line-height:1.15}
+  .s .flag{background:var(--salta)} .i .flag{background:var(--posadas)} .c .flag{background:var(--corrientes)} .r .flag{background:var(--rio)}
+  .dcard-h h3{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--puna);font-weight:600;line-height:1.15}
   .dcard-h .sub{font-size:13px;color:var(--tinta-mute);margin-top:3px}
   .dcard-n{padding:6px 26px 20px}
-  .big{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
-  .s .big{color:var(--salta)} .i .big{color:var(--posadas)} .r .big{color:var(--rio)}
+  .big{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+  .s .big{color:var(--salta)} .i .big{color:var(--posadas)} .c .big{color:var(--corrientes)} .r .big{color:var(--rio)}
   .usd{font-size:14px;color:var(--tinta-mute);margin-top:5px}
   .delta{font-size:13.5px;font-weight:700;margin-top:9px;padding:5px 11px;border-radius:20px;display:inline-block}
   .d-good{background:#eaf4ee;color:#1f5c39} .d-base{background:var(--arena);color:var(--arcilla)} .d-bad{background:#fdeaea;color:#8e2a2a}
@@ -52,13 +52,13 @@
   .dcard-b strong{color:var(--tinta)}
 
   .tbl-wrap{overflow-x:auto;margin:26px 0}
-  table{width:100%;border-collapse:collapse;font-size:14px;background:var(--blanco);border-radius:14px;overflow:hidden;box-shadow:var(--sh-soft);min-width:880px}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;background:var(--blanco);border-radius:14px;overflow:hidden;box-shadow:var(--sh-soft);min-width:1050px}
   th{background:var(--puna);color:#fff;text-align:left;padding:14px 16px;font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;font-weight:600;vertical-align:bottom}
-  th.c-s{background:var(--salta)} th.c-i{background:var(--posadas)} th.c-r{background:var(--rio)}
+  th.c-s{background:var(--salta)} th.c-i{background:var(--posadas)} th.c-c{background:var(--corrientes)} th.c-r{background:var(--rio)}
   td{padding:13px 16px;border-bottom:1px solid var(--linea);vertical-align:top}
   tr:last-child td{border-bottom:none}
   tbody tr:hover{background:#fffaf1}
-  td.rubro{font-weight:700;color:var(--puna);width:170px}
+  td.rubro{font-weight:700;color:var(--puna);width:140px}
   td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
   tr.total td{background:var(--arena);font-weight:700;color:var(--puna);border-top:2px solid var(--ocre);font-size:15px}
   .sect-row td{background:var(--arena);font-weight:700;color:var(--arcilla);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase}
@@ -93,8 +93,8 @@
 
 <div class="hero">
   <div class="container">
-    <span class="hero-eyebrow">Mismas fechas, mismos diez, tres mundos distintos</span>
-    <h1>Salta · Posadas · <em>Río</em></h1>
+    <span class="hero-eyebrow">Mismas fechas, mismos diez, cuatro carnavales distintos</span>
+    <h1>Posadas · Corrientes · Salta · <em>Río</em></h1>
     <p>Viernes 5 al martes 9 de febrero de 2027. Precios reales levantados el 19 de agosto de 2026. Todos los totales están calculados igual: diez personas, nueve pagando, porque la parte de Rodri se reparte.</p>
   </div>
 </div>
@@ -120,6 +120,23 @@
         <div class="dcard-b">
           <p><strong>Lo que comprás:</strong> el vuelo más barato de los tres ($155.041), sambódromo paraguayo a precio de chiste, playas gratis sobre el Paraná y franquicia de compras de USD 300.</p>
           <p><strong>El problema:</strong> el carnaval es una sola noche, el sábado.</p>
+        </div>
+      </div>
+
+      <div class="dcard c">
+        <div class="dcard-h">
+          <span class="flag">El mejor equilibrio</span>
+          <h3>Corrientes</h3>
+          <div class="sub">Capital Nacional del Carnaval · Corsódromo Nolo Alías</div>
+        </div>
+        <div class="dcard-n">
+          <div class="big">$1.017.417</div>
+          <div class="usd">USD 659 · $9.156.750 el grupo</div>
+          <span class="delta d-good">−21% vs Salta</span>
+        </div>
+        <div class="dcard-b">
+          <p><strong>Lo que comprás:</strong> <strong>tres noches seguidas</strong> de corsódromo (sáb, dom y lun), casaquinta con pileta a USD 83 por cabeza, playas del Paraná gratis abiertas hasta las 22 y boliches concentrados en la Costanera Sur.</p>
+          <p><strong>El problema:</strong> calor bochornoso y no desfila ni el viernes ni el martes.</p>
         </div>
       </div>
 
@@ -188,6 +205,7 @@
         <th>Rubro</th>
         <th class="c-s">Salta &amp; Jujuy</th>
         <th class="c-i">Posadas</th>
+        <th class="c-c">Corrientes</th>
         <th class="c-r">Río de Janeiro</th>
       </tr></thead>
       <tbody>
@@ -195,34 +213,40 @@
           <td class="rubro">Vuelo ida y vuelta</td>
           <td class="num">$344.163<br><span style="font-size:12px;color:var(--tinta-mute)">Aerolíneas 12:50 + JetSMART 22:46</span></td>
           <td class="num win">$155.041<br><span style="font-size:12px;color:var(--tinta-mute)">JetSMART AEP 16:00, 1h40 · <strong>menos de la mitad</strong></span></td>
+          <td class="num">$255.949<br><span style="font-size:12px;color:var(--tinta-mute)">Aerolíneas AEP 14:30 → <strong>Resistencia</strong>, 1h35</span></td>
           <td class="num lose">$727.948<br><span style="font-size:12px;color:var(--tinta-mute)">JetSMART AEP 15:25 → GIG</span></td>
         </tr>
         <tr>
           <td class="rubro">Alojamiento<br><span style="font-weight:400;font-size:12px;color:var(--tinta-mute)">4 noches, dividido entre 10</span></td>
           <td class="num">$244.767<br><span style="font-size:12px;color:var(--tinta-mute)">Casa en Tilcara · <strong>ya reservada</strong></span></td>
           <td class="num">$139.050<br><span style="font-size:12px;color:var(--tinta-mute)">estimado, USD 900 el grupo</span></td>
+          <td class="num win">$127.926<br><span style="font-size:12px;color:var(--tinta-mute)">Casaquinta Los Amigos, precio real</span></td>
           <td class="num lose">$417.150<br><span style="font-size:12px;color:var(--tinta-mute)">estimado, sin precio confirmado</span></td>
         </tr>
         <tr>
           <td class="rubro">Traslados</td>
           <td class="num">$121.009<br><span style="font-size:12px;color:var(--tinta-mute)">2 Fiat Cronos + nafta</span></td>
           <td class="num">$77.938<br><span style="font-size:12px;color:var(--tinta-mute)">2 autos + nafta + remises a Encarnación</span></td>
+          <td class="num">$81.800<br><span style="font-size:12px;color:var(--tinta-mute)">2 autos + nafta · corsódromo a 12 km</span></td>
           <td class="num">incluido<br><span style="font-size:12px;color:var(--tinta-mute)">metro y Uber, en el diario</span></td>
         </tr>
         <tr>
           <td class="rubro">Comida y bebida</td>
           <td class="num">$225.000</td>
           <td class="num">$210.000</td>
+          <td class="num">$240.000</td>
           <td class="num">$231.750</td>
         </tr>
         <tr>
           <td class="rubro">Actividades</td>
           <td class="num win">$125.000<br><span style="font-size:12px;color:var(--tinta-mute)">el carnaval es gratis</span></td>
           <td class="num win">$90.000<br><span style="font-size:12px;color:var(--tinta-mute)">sambódromo USD 12,5 · playas gratis</span></td>
+          <td class="num">$110.000<br><span style="font-size:12px;color:var(--tinta-mute)">3 noches de tribuna a ~$20.000</span></td>
           <td class="num">$310.545<br><span style="font-size:12px;color:var(--tinta-mute)">Sambódromo $148.320 + paseos</span></td>
         </tr>
         <tr>
           <td class="rubro">Seguro de viaje</td>
+          <td class="num">—</td>
           <td class="num">—</td>
           <td class="num">—</td>
           <td class="num">$46.350</td>
@@ -232,23 +256,27 @@
           <td class="num">$100.000</td>
           <td class="num">$100.000</td>
           <td class="num">$100.000</td>
+          <td class="num">$100.000</td>
         </tr>
         <tr>
           <td class="rubro" style="font-weight:600">Subtotal<br><span style="font-weight:400;font-size:12px;color:var(--tinta-mute)">si pagaran los 10</span></td>
           <td class="num">$1.159.939</td>
           <td class="num">$772.028</td>
+          <td class="num">$915.675</td>
           <td class="num">$1.833.743</td>
         </tr>
         <tr>
           <td class="rubro" style="font-weight:600">+ la parte de Rodri<br><span style="font-weight:400;font-size:12px;color:var(--tinta-mute)">repartida entre 9</span></td>
           <td class="num">$128.882</td>
           <td class="num">$85.781</td>
+          <td class="num">$101.742</td>
           <td class="num lose">$203.749</td>
         </tr>
         <tr class="total">
           <td>TOTAL POR PAGADOR</td>
           <td class="num">$1.288.821<br><span style="font-weight:400;font-size:12.5px">USD 834 · grupo $11.599.386</span></td>
           <td class="num">$857.809<br><span style="font-weight:400;font-size:12.5px">USD 555 · grupo $7.720.285</span></td>
+          <td class="num">$1.017.417<br><span style="font-weight:400;font-size:12.5px">USD 659 · grupo $9.156.750</span></td>
           <td class="num">$2.037.492<br><span style="font-weight:400;font-size:12.5px">USD 1.319 · grupo $18.337.430</span></td>
         </tr>
       </tbody>
@@ -266,87 +294,99 @@
     <div class="tbl-wrap">
     <table>
       <thead><tr>
-        <th></th><th class="c-s">Salta &amp; Jujuy</th><th class="c-i">Posadas</th><th class="c-r">Río de Janeiro</th>
+        <th></th><th class="c-s">Salta &amp; Jujuy</th><th class="c-i">Posadas</th><th class="c-c">Corrientes</th><th class="c-r">Río de Janeiro</th>
       </tr></thead>
       <tbody>
-        <tr class="sect-row"><td colspan="4">El carnaval, que era el motivo del viaje</td></tr>
+        <tr class="sect-row"><td colspan="5">El carnaval, que era el motivo del viaje</td></tr>
         <tr>
           <td class="rubro">¿Hay carnaval?</td>
           <td><span class="win">Sí, y es el punto fuerte.</span> Desentierro del diablo el sábado 6, Carnaval Grande lunes 8, Martes de Chaya el 9. Comparsas abiertas: te meten adentro, te convidan chicha y talco</td>
           <td><span class="win">Sí, pero del otro lado del puente.</span> El <strong>Carnaval Encarnaceno</strong> (Paraguay) tiene sambódromo propio para 15-17.000, 100 ediciones y 5 comparsas de 100-150 integrantes. <span class="lose">Desfila sólo los sábados: una única noche, el 6</span>. El carnaval posadeño son corsos barriales gratuitos que en 2026 ni siquiera cayeron en el finde largo</td>
           <td><span class="win">El más grande del mundo.</span> Tres noches de Grupo Especial en el Sambódromo, 12 escolas, más 459 desfiles de calle y 6 millones de personas en los blocos</td>
+          <td><span class="win">Tres noches seguidas.</span> Corsódromo Nolo Alías, capacidad 14-15.000 por noche, 8 a 11 comparsas cada una. <span class="lose">Pero no desfila el viernes 5 ni el martes 9</span> — patrón verificado en 2025 y 2026. Se suman los carnavales barriales, gratis y en la calle</td>
         </tr>
         <tr>
           <td class="rubro">Cuánto cuesta entrar</td>
           <td>Gratis. Se camina y se participa</td>
           <td><span class="win">Grada USD 3-5 · camarote USD 12,5.</span> Los diez en camarote: unos USD 125 en total</td>
           <td>Passaporte 3 noches R$ 499 (USD 96). Es la mejor relación precio-valor del viaje. Camarote con open bar: USD 837 una noche</td>
+          <td>Tribuna popular desde $7.500, intermedia $15.000-25.000, palco VIP $40.000. Todo en pesos, por Norte Ticket</td>
         </tr>
 
-        <tr class="sect-row"><td colspan="4">Dónde duermen diez tipos</td></tr>
+        <tr class="sect-row"><td colspan="5">Dónde duermen diez tipos</td></tr>
         <tr>
           <td class="rubro">¿Hay casa para 10?</td>
           <td><span class="win">Sí, y ya está reservada.</span> USD 1.584,25 las cuatro noches, pendiente de confirmación</td>
           <td>Hay, pero es estimado. Posadas no es plaza de alquiler turístico: el stock de 10 plazas es finito. En hotel, en cambio, sobra lugar</td>
           <td><span class="lose">Sí, pero carísimo y hay que correr.</span> Depto de 10 en Copacabana, estimado USD 2.700 las 4 noches</td>
+          <td><span class="win">Sí, y barata.</span> Casaquinta Los Amigos: 12 plazas, pileta, a 4,7 km del centro, <strong>USD 828 las 4 noches</strong> = USD 83 por cabeza. Precio real verificado</td>
         </tr>
         <tr>
           <td class="rubro">Presión de demanda</td>
           <td>Tilcara cerró carnaval 2026 con 98,9% de ocupación. Ya resuelto</td>
           <td><span class="win">70% en carnaval 2026.</span> La más relajada de las tres: a seis meses conseguís sin pagar sobreprecio</td>
           <td><span class="lose">99,02% de ocupación</span>, récord histórico. Tarifa media +49% interanual. Muchos hosts piden mínimo de 5 a 7 noches y ustedes tienen 4</td>
+          <td>88-92% en carnaval 2026: alta pero no agotada. <span class="lose">Ojo:</span> Airbnb devuelve sólo 13 propiedades para 10 personas en toda el área. Las buenas se van primero</td>
         </tr>
         <tr>
           <td class="rubro">Trampa a evitar</td>
           <td>Varios avisos prohíben fiestas: hay que declarar el grupo</td>
           <td>Las fechas 2027 de Encarnación no están confirmadas. Sin sambódromo el sábado 6, el destino pierde su gancho</td>
           <td>Reventa de entradas: el MPRJ tiene investigación abierta y se vieron entradas a 5,5 veces el precio oficial</td>
+          <td>Varias propiedades todavía no cargaron tarifa de carnaval 2027: lo que se ve hoy es tarifa base. Reservar ya con cancelación gratis congela el precio</td>
         </tr>
 
-        <tr class="sect-row"><td colspan="4">Qué se hace de día</td></tr>
+        <tr class="sect-row"><td colspan="5">Qué se hace de día</td></tr>
         <tr>
           <td class="rubro">Lo típico</td>
           <td>Salinas Grandes a 3.450 m, Hornocal a 4.350, Cuesta de Lipán, bodegas de altura en Maimará y Purmamarca</td>
           <td>Playas del Paraná gratis (El Brete y Costa Sur), ruinas jesuíticas de San Ignacio a 64 km por $8.000, playas y compras en Encarnación, Costanera</td>
           <td>Cristo Redentor, Pan de Azúcar, Maracaná, Escadaria Selarón, playas de Copacabana e Ipanema, parapente en São Conrado</td>
+          <td>Cinco playas municipales gratis sobre el Paraná (Arazaty abre hasta las 22 justo esos días), Paso de la Patria a 35 km con 16 km de playas, pesca de dorado</td>
         </tr>
         <tr>
           <td class="rubro">El plus para el grupo</td>
           <td>Casa con parrilla propia. Asado y previa sin salir</td>
           <td>Franquicia de compras de <strong>USD 300 por cabeza</strong> cruzando a Encarnación, y todo lo que se consume en Paraguay sale la mitad</td>
           <td>Churrascaria libre desde USD 25, botecos de Lapa, y la calle como fiesta permanente</td>
+          <td>Bar dentro de la playa Arazaty II, y el corsódromo funciona con tarjeta cashless: nada de efectivo en las barras</td>
         </tr>
         <tr>
           <td class="rubro">La noche</td>
           <td>Fortines de carnaval hasta el amanecer, más una noche de peñas en Salta</td>
           <td>Costanera con bares y <strong>UMMA</strong>, el boliche grande de la ciudad, con sectores VIP. Correcta sin ser memorable</td>
           <td><span class="win">Imbatible.</span> Lapa, blocos hasta la mañana, Sambódromo hasta las 6 AM</td>
+          <td>Buena y concentrada: Tampa 1920, ZAVOD y Flipa Club a metros uno del otro en Costanera Sur. El desfile termina 3:30-4:00 y ahí sigue la noche</td>
         </tr>
 
-        <tr class="sect-row"><td colspan="4">Riesgos reales</td></tr>
+        <tr class="sect-row"><td colspan="5">Riesgos reales</td></tr>
         <tr>
           <td class="rubro">Clima</td>
           <td>Febrero es el mes más lluvioso en Jujuy: 188 mm. Cortes de ruta por crecidas de 2 a 6 horas son normales, no excepcionales</td>
           <td>26 °C de media, 74% de humedad, 145 mm en 10 días de lluvia. El sambódromo desfila igual bajo lluvia. Zona de mosquitos</td>
           <td>El mes más caluroso: 31-34 °C con 80% de humedad. Río registró <span class="lose">sensación térmica de 60 °C</span> en un viernes de carnaval. En un bloco sin sombra eso es riesgo médico</td>
+          <td><span class="lose">Máxima media de 32,2 °C con 79% de bochorno.</span> El 7 de febrero es estadísticamente el día más pesado del año y cae justo en el medio del viaje. Siesta obligatoria de 13 a 17</td>
         </tr>
         <tr>
           <td class="rubro">Salud</td>
           <td>Apunamiento: 25% de los que suben a 2.500 m, 40% a 4.300. Se confunde con resaca</td>
           <td>Zona endémica de fiebre amarilla y pico de dengue en febrero. La vacuna hay que darla 10 días antes</td>
           <td>Fiebre amarilla recomendada. Salud privada cara: seguro obligatorio en la práctica</td>
+          <td>Sin alertas particulares más allá del calor y la deshidratación</td>
         </tr>
         <tr>
           <td class="rubro">Seguridad</td>
           <td>Robos en multitudes. Alcohol cero con controles reforzados</td>
           <td>Sin alertas particulares</td>
           <td><span class="lose">Es el punto débil.</span> EE.UU. mantiene nivel 2 y advierte específicamente sobre dopaje de bebidas y robos por apps de citas. Favelas en nivel 4: no ir ni con tour. Río mejoró mucho en 2026 (−43,5% de hechos con turistas) pero sigue exigiendo protocolo</td>
+          <td>Sin alertas particulares. Uber y DiDi operan legalmente en la ciudad</td>
         </tr>
         <tr>
           <td class="rubro">Documentación</td>
           <td>DNI</td>
           <td>DNI tarjeta vigente para cruzar a Paraguay. <span class="lose">El regreso de madrugada del sambódromo</span>, con aduana y colas en el puente, es el dolor de cabeza del plan</td>
           <td>DNI tarjeta celeste, sin pasaporte ni visa. Pero hace falta seguro y hay que resolver cómo llevar plata</td>
+          <td>DNI. <span class="lose">El detalle a resolver:</span> no hay vuelo de vuelta desde Corrientes el martes 9, así que se vuela a <strong>Resistencia</strong>, a 29 km cruzando el puente</td>
         </tr>
       </tbody>
     </table>
@@ -366,9 +406,10 @@
       <ul class="clean">
         <li><strong>Salta:</strong> cuatro días seguidos. Desentierro el sábado, comparsas el domingo, Carnaval Grande el lunes, Chaya el martes.</li>
         <li><strong>Río:</strong> tres noches de Sambódromo más blocos de calle todo el día, todos los días.</li>
+        <li><strong>Corrientes:</strong> tres noches seguidas, sábado, domingo y lunes. Ni el viernes ni el martes.</li>
         <li><strong>Posadas:</strong> <span class="lose">una sola noche</span>, el sábado 6, cruzando a Encarnación. Domingo, lunes y martes no hay nada.</li>
       </ul>
-      <p style="margin-top:12px">Si el viaje se llama "carnaval", Posadas entrega el 25% de lo que entregan los otros dos. Si el viaje es <strong>juntarse cinco días</strong> y el carnaval es una noche buena adentro de eso, Posadas es imbatible en precio.</p>
+      <p style="margin-top:12px">Puesto en plata, esto es lo que ordena la decisión: <strong>Corrientes cuesta $159.607 más que Posadas y da el triple de carnaval.</strong> Es el mejor precio por noche de fiesta de los cuatro.</p>
     </div>
 
     <div class="hl warn">
@@ -389,10 +430,20 @@
     </div>
 
     <div class="hl">
-      <span class="badge b-gold">El destino que no está en la tabla</span>
-      <h3>Si el carnaval es el punto, el que gana en el Litoral es Corrientes</h3>
-      <p>El Corsódromo Nolo Alías hace <strong>diez noches de desfile</strong>, incluidas las del propio fin de semana largo: en 2026 hubo carnaval el sábado, el domingo <em>y</em> el lunes feriado. Tribunas desde $7.500 y palco VIP a $40.000, todo en pesos y sin cruzar frontera.</p>
-      <p>No lo puse como columna porque <strong>no es un side-trip de Posadas</strong>: son 300 km, unas cuatro horas y media. Sería basarse en Corrientes, que es otro viaje distinto. Pero si después de ver este cuadro la conclusión es "queremos carnaval todos los días y barato", <strong>Corrientes es la opción que hay que cotizar</strong>, no Posadas.</p>
+      <span class="badge b-gold">Sobre Corrientes</span>
+      <h3>Es el punto óptimo entre plata y carnaval</h3>
+      <p>Sale <strong>$271.404 menos que Salta</strong> y da tres noches consecutivas de corsódromo, que es el pico exacto de la fiesta. Contra Posadas son $159.607 más caro, pero por el triple de carnaval. En la relación precio por noche de desfile, gana los cuatro.</p>
+      <p>El alojamiento ayuda mucho: la <strong>Casaquinta "Los Amigos"</strong> son 12 plazas con pileta a USD 828 las cuatro noches, o sea USD 83 por cabeza. Es precio real verificado, no estimación. Y encima varias propiedades todavía no cargaron tarifa de carnaval 2027, así que reservando ahora con cancelación gratis congelás la tarifa base.</p>
+      <p style="margin-top:12px"><strong>Lo que hay que saber antes de entusiasmarse:</strong></p>
+      <ul class="clean warn">
+        <li><strong>No hay vuelo de vuelta desde Corrientes el martes 9.</strong> Google directamente no devuelve combinación. Se vuela a <strong>Resistencia</strong>, a 29 km cruzando el puente, con Aerolíneas a las 14:30 o 18:15.</li>
+        <li><strong>El viernes 5 y el martes 9 no hay desfile.</strong> Patrón verificado en 2025 y 2026: el corsódromo abre sábado, domingo y lunes del finde largo, y descansa el viernes previo y el martes.</li>
+        <li><strong>El corsódromo está a 12 km del centro</strong>, pegado al aeropuerto. Tres noches de ida y vuelta de madrugada para diez personas: dos autos alquilados salen menos que los remises.</li>
+        <li><strong>El calor es el peor de los cuatro destinos.</strong> Máxima media de 32,2 °C con 79% de bochorno, y el domingo 7 es estadísticamente el día más pesado del año en Corrientes.</li>
+        <li><strong>Gualeguaychú es más grande.</strong> 25.000 a 38.000 de capacidad contra 14.000-15.000 de Corrientes. El título de Capital Nacional del Carnaval es por tradición, no por tamaño.</li>
+        <li>Los Esteros del Iberá no entran: 370 km con 80 de ripio. Y el dorado se pesca <strong>con devolución obligatoria</strong>, así que no hay asado de pescado.</li>
+      </ul>
+      <p style="margin-top:12px;font-size:14px;color:var(--tinta-mute)">El calendario 2027 sale entre diciembre y enero. La comparsa Sapucay ya tiene web activa para 2027, así que la edición está confirmada; falta la grilla.</p>
     </div>
 
     <div class="hl">
@@ -405,11 +456,11 @@
 
     <div class="hl">
       <span class="badge b-gold">Si tuviera que elegir</span>
-      <h3>Sigo con Salta, pero Posadas obliga a una conversación</h3>
-      <p>Río gana en espectáculo por goleada, pero llegan tarde para resolver lo único que no se puede improvisar, que es dónde duermen diez personas.</p>
-      <p><strong>Posadas es el que más me hizo dudar.</strong> Un tercio más barato es mucha plata, y el sambódromo encarnaceno por USD 12,50 es de las mejores relaciones precio-valor que vi en todo este comparativo. Pero cuando lo bajo a lo concreto: son <strong>cinco días de viaje para una noche de carnaval</strong>. El domingo, el lunes feriado y el martes feriado no hay absolutamente nada de carnaval en Posadas ni en Encarnación. Y las fechas ni siquiera están confirmadas.</p>
-      <p>Salta entrega carnaval los cuatro días, ya tiene la casa reservada, y es participativo en vez de espectáculo: te meten adentro de la comparsa. Para una despedida, terminar a las 5 de la mañana en un fortín en Humahuaca es mejor historia que mirar un desfile desde una tribuna.</p>
-      <p style="margin-top:12px;font-size:14px;color:var(--tinta-mute)"><strong>Cuándo cambiaría de opinión:</strong> si el grupo dice que el presupuesto es el problema, Posadas es la respuesta correcta y hay que llamar ya a Encarnación. Si dicen que quieren carnaval todos los días sin gastar como en Río, la respuesta no es ninguna de estas tres: es <strong>Corrientes</strong>.</p>
+      <h3>Sigo con Salta, pero ahora hay un segundo que discute en serio</h3>
+      <p>Río gana en espectáculo por goleada, pero llegan tarde para resolver lo único que no se puede improvisar, que es dónde duermen diez personas. <strong>Posadas es demasiado poco carnaval</strong>: cinco días de viaje para una sola noche, y encima sin fechas confirmadas.</p>
+      <p><strong>Corrientes es el que ahora me hace dudar.</strong> Tres noches de corsódromo, casaquinta con pileta a precio verificado, playas gratis y $271.000 menos por cabeza que Salta. Si el grupo mira la planilla y dice "che, es mucha plata", <strong>Corrientes es la respuesta correcta y no hay mucho más que discutir.</strong></p>
+      <p>Me quedo con Salta igual por dos razones que no están en el precio. Una: es el único donde <strong>ya está resuelto lo difícil</strong> —la casa está reservada— y donde hay carnaval los cuatro días, no tres. La otra es de tipo de viaje: en la Quebrada el carnaval es <strong>participativo</strong>, te meten adentro de la comparsa, te convidan chicha y terminás a las cinco de la mañana en un fortín en Humahuaca. En Corrientes mirás un desfile desde una tribuna, que está buenísimo pero es otra cosa. Para una despedida, la primera es mejor historia.</p>
+      <p style="margin-top:12px;font-size:14px;color:var(--tinta-mute)"><strong>Cuándo cambiaría de opinión:</strong> si el presupuesto es el problema, <strong>Corrientes</strong>, y antes de fin de año hay que agarrar la Casaquinta Los Amigos con cancelación gratis. Si aparece depto para diez en Copacabana a precio razonable y el grupo banca volver el miércoles 10, <strong>Río</strong> sin discusión.</p>
     </div>
   </div>
 </section>
@@ -419,8 +470,8 @@
     <div class="f-title">Comparativo de destinos</div>
     <p style="font-size:15px;color:#b6c2c8">Despedida de Rodri · 5 al 9 de febrero de 2027</p>
     <p class="f-meta">
-      Armado el 19 de agosto de 2026 · v2, con Posadas en lugar de Iguazú<br>
-      Vuelos: Google Flights, 19-ago-2026, ida y vuelta con impuestos · Carnaval de Río: calendario oficial de LIESA · Carnaval Encarnaceno: municipalidad de Encarnación y ABC Color · Carnaval de Corrientes: agenda oficial 2026 · Ocupación hotelera: ABIH-RJ, MisionesOnline y El Territorio · Alojamiento de Posadas y Río: estimado, sin precio confirmado<br>
+      Armado el 19 de agosto de 2026 · v3, con Corrientes sumado como cuarta opción<br>
+      Vuelos: Google Flights, 19-ago-2026, ida y vuelta con impuestos · Carnaval de Río: calendario oficial de LIESA · Carnaval Encarnaceno: municipalidad de Encarnación y ABC Color · Carnaval de Corrientes: agenda oficial 2026 vía Norte Ticket y El Litoral · Alojamiento de Corrientes: Airbnb y Booking para las fechas exactas · Ocupación hotelera: ABIH-RJ, MisionesOnline y El Territorio · Alojamiento de Posadas y Río: estimado, sin precio confirmado<br>
       <a href="https://eze1311.github.io/despedida-rodri-2027/">← Volver al plan de Salta &amp; Jujuy</a>
     </p>
   </div>
