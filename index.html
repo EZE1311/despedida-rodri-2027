@@ -1090,6 +1090,7 @@
 
   $('nPers').addEventListener('change', calc);
   $('mimosas').addEventListener('input', calc);
+  $('mimosas').addEventListener('focus', function(){ this.select(); });
   Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(b){
     b.addEventListener('click', function(){
       Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(x){ x.classList.remove('active'); });
