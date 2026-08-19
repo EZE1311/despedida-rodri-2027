@@ -155,6 +155,44 @@
   .tl-item h4{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--puna);font-weight:600;margin-bottom:3px}
   .tl-item p{font-size:14px;color:var(--tinta-soft)}
 
+  /* ---- calculadora de presupuesto ---- */
+  .calc-controls{display:flex;flex-wrap:wrap;gap:22px;background:var(--blanco);border:1px solid var(--linea);border-radius:18px;padding:22px 26px;box-shadow:var(--sh-soft);margin-bottom:24px;align-items:flex-end}
+  .ctrl{display:flex;flex-direction:column;gap:7px}
+  .ctrl label{font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--tinta-mute);font-weight:700}
+  .ctrl select,.ctrl input{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:600;color:var(--puna);background:var(--crema);border:1.5px solid var(--linea);border-radius:11px;padding:10px 14px;min-width:120px;outline:none;transition:border-color .2s}
+  .ctrl select:focus,.ctrl input:focus{border-color:var(--ocre)}
+  .ctrl input{font-variant-numeric:tabular-nums}
+  .seg{display:flex;background:var(--crema);border:1.5px solid var(--linea);border-radius:11px;padding:3px;gap:3px}
+  .seg-btn{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tinta-soft);background:transparent;border:none;border-radius:8px;padding:8px 18px;cursor:pointer;transition:all .2s}
+  .seg-btn.active{background:var(--terracota);color:#fff;box-shadow:0 2px 8px rgba(194,84,46,.3)}
+
+  .calc-hero{display:flex;flex-wrap:wrap;gap:0;background:linear-gradient(135deg,var(--puna) 0%,#2c4a58 100%);border-radius:22px;overflow:hidden;box-shadow:var(--sh-card);margin-bottom:22px}
+  .ch-main{flex:1 1 300px;padding:34px 36px;border-right:1px solid rgba(255,255,255,.12)}
+  .ch-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9fb3bd;font-weight:700;margin-bottom:8px}
+  .ch-num{font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:600;color:var(--ocre);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .ch-usd{font-size:16px;color:#b6c9d2;margin-top:8px;font-variant-numeric:tabular-nums}
+  .ch-side{flex:1 1 300px;padding:26px 32px;display:flex;flex-direction:column;justify-content:center;gap:11px}
+  .ch-item{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14px}
+  .ch-k{color:#9fb3bd}
+  .ch-v{color:#fff;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+
+  .aviso{border-radius:14px;padding:15px 20px;margin-bottom:14px;font-size:14.5px;border-left:4px solid}
+  .aviso.rojo{background:#fdf0ea;border-color:var(--terracota);color:#7a3418}
+  .aviso.amar{background:#fdf7e6;border-color:var(--ocre);color:#6b5416}
+  .aviso.verde{background:#f2f7ed;border-color:var(--cardon);color:#3d5230}
+  .aviso strong{font-weight:700}
+
+  tr.fijo td:first-child::after{content:'fijo';display:inline-block;margin-left:8px;font-size:9.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;background:var(--turquesa);color:#fff;padding:2px 7px;border-radius:10px;vertical-align:middle}
+  tr.percap td:first-child::after{content:'por cabeza';display:inline-block;margin-left:8px;font-size:9.5px;text-transform:uppercase;letter-spacing:1px;font-weight:700;background:var(--arena);color:var(--arcilla);padding:2px 7px;border-radius:10px;vertical-align:middle}
+
+  @media(max-width:640px){
+    .ch-main{padding:26px 22px;border-right:none;border-bottom:1px solid rgba(255,255,255,.12)}
+    .ch-num{font-size:46px}
+    .ch-side{padding:20px 22px}
+    .calc-controls{padding:18px}
+    .ctrl select,.ctrl input{min-width:100%}
+  }
+
   footer{background:var(--puna);color:#cfd6da;padding:48px 0 40px;text-align:center}
   footer .f-title{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;margin-bottom:10px;font-style:italic}
   footer .f-meta{font-size:12.5px;color:#8fa0a9;margin-top:18px;line-height:1.8}
@@ -194,7 +232,7 @@
     <a href="#mapa">Mapa</a>
     <a href="#dormir">La casa</a>
     <a href="#ruedas">Ruedas</a>
-    <a href="#plata">Plata</a>
+    <a href="#presupuesto">Presupuesto</a>
     <a href="#reservas">Qué cerrar</a>
     <a href="#manual">Manual</a>
     <a href="#agenda">Agenda</a>
@@ -625,9 +663,10 @@
       <div class="card t3">
         <div class="card-icon">🚙</div>
         <div class="card-label">La decisión</div>
-        <div class="card-value">Dos autos, no una van</div>
-        <p class="card-sub">El mercado de alquiler en Salta <strong>corta en 10 plazas</strong>: la Mercedes V-Class, a ARS 254.520 por día. Las combis de 12 a 19 asientos aparecen casi siempre <em>con chofer</em>, porque transportar pasajeros requiere licencia profesional clase D que ninguno tiene.</p>
-        <p class="card-sub" style="margin-top:10px">Dos vehículos de 7 plazas (Chevrolet Spin en Hertz, ARS 126.879/día) dan redundancia si uno falla en el ripio del Hornocal y flexibilidad para que el grupo se parta.</p>
+        <div class="card-value">2 × Fiat Cronos AT</div>
+        <p class="card-sub"><strong>USD 275,11 cada uno</strong> por todo el período, tarifa estándar. Automáticos, 8,3 l/100km. Los dos suman <strong>USD 550,22</strong> — a repartir entre todos, así que es de los rubros que más se abaratan cuanta más gente va.</p>
+        <p class="card-sub" style="margin-top:10px"><strong>Ojo con los dos límites del vehículo:</strong> son <strong>5 asientos y 3 valijas</strong> por auto. Con dos autos hay 10 lugares exactos y 6 valijas para 10 personas — mochila de mano o se despacha poco. Y a partir de la persona 11 hace falta un tercer auto.</p>
+        <p class="card-sub" style="margin-top:10px">Dos vehículos en vez de una van también dan redundancia si uno falla en el ripio del Hornocal, y flexibilidad para que el grupo se parta. Las combis de 12 a 19 asientos van casi siempre <em>con chofer</em>, porque transportar pasajeros requiere licencia profesional clase D que ninguno tiene.</p>
         <p class="card-sub" style="margin-top:10px"><strong>Requisito que traba reservas:</strong> tarjeta de crédito internacional del conductor con margen para bloquear la franquicia completa. Sin margen, no entregan el auto. Varias agencias piden 25 años mínimo.</p>
       </div>
 
@@ -664,94 +703,71 @@
   </div>
 </section>
 
-<!-- ============ PLATA ============ -->
-<section class="alt" id="plata">
+<!-- ============ PRESUPUESTO ============ -->
+<section class="alt" id="presupuesto">
   <div class="container">
     <span class="section-eyebrow">La plata</span>
-    <h2 class="section-title">Cuánto sale <em>esto</em></h2>
-    <p class="section-lead">Dos columnas honestas. Precios de agosto de 2026 — en febrero de 2027 los números en pesos van a ser más altos por inflación, así que <strong>la referencia estable es el dólar</strong> (usado a ARS 1.545). La casa ya es dato duro; el resto sigue siendo estimación.</p>
+    <h2 class="section-title">El <em>presupuesto</em></h2>
+    <p class="section-lead">Calculadora en vivo. Cambiá cuántos son y todo se recalcula, incluida la cantidad de autos. <strong>Rodri no paga</strong>: su parte se reparte entre los demás. Precios de agosto de 2026 — en febrero de 2027 los pesos van a ser más altos por inflación, así que la referencia estable es el dólar (ARS 1.545).</p>
+
+    <div class="calc-controls">
+      <div class="ctrl">
+        <label for="nPers">¿Cuántos van?</label>
+        <select id="nPers">
+          <option>5</option><option>6</option><option>7</option><option>8</option><option>9</option>
+          <option selected>10</option><option>11</option><option>12</option><option>13</option>
+          <option>14</option><option>15</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label>Modo</label>
+        <div class="seg">
+          <button class="seg-btn active" data-modo="aus">Austero</button>
+          <button class="seg-btn" data-modo="com">Cómodo</button>
+        </div>
+      </div>
+      <div class="ctrl">
+        <label for="mimosas">Mimosas · ARS por persona <span style="font-weight:400;text-transform:none;letter-spacing:0">(lo define Jano)</span></label>
+        <input type="number" id="mimosas" value="0" min="0" step="10000" placeholder="0">
+      </div>
+    </div>
+
+    <div class="calc-hero">
+      <div class="ch-main">
+        <div class="ch-label">Paga cada uno</div>
+        <div class="ch-num" id="porPagador">—</div>
+        <div class="ch-usd" id="porPagadorUsd">—</div>
+      </div>
+      <div class="ch-side">
+        <div class="ch-item"><span class="ch-k">Total del viaje</span><span class="ch-v" id="totalGrupo">—</span></div>
+        <div class="ch-item"><span class="ch-k">Pagan</span><span class="ch-v" id="cantPagan">—</span></div>
+        <div class="ch-item"><span class="ch-k">Autos necesarios</span><span class="ch-v" id="cantAutos">—</span></div>
+        <div class="ch-item"><span class="ch-k">Recargo por bancar a Rodri</span><span class="ch-v" id="recargoRodri">—</span></div>
+      </div>
+    </div>
+
+    <div id="avisos"></div>
 
     <div class="tbl-wrap">
     <table>
-      <thead><tr><th>Rubro</th><th class="num">Modo austero</th><th class="num">Modo cómodo</th><th>Qué cambia entre uno y otro</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Vuelo</strong> ida y vuelta</td>
-          <td class="num">328.445</td>
-          <td class="num">344.163</td>
-          <td>JetSMART 21:05 + noche de hotel en Salta, vs. Aerolíneas 12:50 que sube directo con luz</td>
-        </tr>
-        <tr class="best">
-          <td><strong>Casa en Tilcara</strong> 4 noches<br><span style="font-size:12px;color:var(--cardon);font-weight:700;text-transform:uppercase;letter-spacing:1px">✓ reservada</span></td>
-          <td class="num"><strong>244.767</strong></td>
-          <td class="num"><strong>244.767</strong></td>
-          <td><strong>Dato real, no estimación.</strong> USD 1.584,25 el total del grupo · USD 158,43 por cabeza · USD 39,61 por persona por noche</td>
-        </tr>
-        <tr>
-          <td><strong>Transporte</strong> 5 días</td>
-          <td class="num">162.000</td>
-          <td class="num">230.000</td>
-          <td>Dos autos manejando ustedes vs. autos + chofer contratado el sábado y el domingo</td>
-        </tr>
-        <tr>
-          <td><strong>Comida y bebida</strong></td>
-          <td class="num">225.000</td>
-          <td class="num">310.000</td>
-          <td>Parrilla en la casa y mercado vs. comer afuera todos los días</td>
-        </tr>
-        <tr>
-          <td><strong>Carnaval y actividades</strong></td>
-          <td class="num">125.000</td>
-          <td class="num">260.000</td>
-          <td>Talco, chicha, fortín y <strong>Bodega Kindgard ($35.000)</strong> vs. + excursiones guiadas al Hornocal y Salinas, chofer para la ruta del vino</td>
-        </tr>
-        <tr>
-          <td><strong>Caramelos</strong></td>
-          <td class="num">100.000</td>
-          <td class="num">100.000</td>
-          <td>Monto fijo por cabeza · ARS 1.000.000 el grupo</td>
-        </tr>
-        <tr>
-          <td><strong>Mimosas</strong></td>
-          <td class="num" style="color:var(--terracota);font-weight:700">a confirmar</td>
-          <td class="num" style="color:var(--terracota);font-weight:700">a confirmar</td>
-          <td><strong>Jano</strong> define el monto por persona. Único ítem sin cerrar del presupuesto</td>
-        </tr>
-        <tr class="total">
-          <td>TOTAL POR PERSONA<br><span style="font-weight:400;font-size:12px">sin mimosas</span></td>
-          <td class="num">≈ 1.185.000<br><span style="font-weight:400;font-size:12.5px">USD 767</span></td>
-          <td class="num">≈ 1.489.000<br><span style="font-weight:400;font-size:12.5px">USD 964</span></td>
-          <td>Los diez: ARS 11,9 M vs. 14,9 M</td>
-        </tr>
-      </tbody>
+      <thead><tr><th>Rubro</th><th>Cómo escala</th><th class="num">Total del grupo</th><th class="num">Por pagador</th></tr></thead>
+      <tbody id="filas"></tbody>
     </table>
     </div>
 
-    <div class="hl warn">
-      <span class="badge b-warn">Se pasó del millón</span>
-      <h3>La casa real y los caramelos empujaron el número</h3>
-      <p>El modo austero venía cerrando en <strong>ARS 930.000</strong>. Ahora da <strong>1.185.000</strong>, unos 185.000 por encima del objetivo. Tres cosas lo movieron y conviene tenerlas separadas:</p>
-      <ul class="clean">
-        <li><strong>La casa: +144.767 por cabeza sobre lo estimado.</strong> Yo había presupuestado $250.000 la noche para el grupo en modo austero y la realidad son $611.917. No es que hayan pagado de más — es que mi estimación era optimista para Tilcara en carnaval. Este número ahora es firme.</li>
-        <li><strong>Caramelos: +100.000 por cabeza.</strong> Un ítem nuevo que antes no existía en el cálculo, así que es aumento puro, no desvío.</li>
-        <li><strong>El viñedo: +10.000 por cabeza.</strong> Kindgard sale $35.000 y yo había presupuestado $25.000 para una bodega más chica. Diferencia menor.</li>
-      </ul>
-      <p style="margin-top:12px">Sacando los caramelos, el viaje daría <strong>1.085.000</strong> — o sea que el desvío real contra el plan original es del 8,5%, que para una estimación hecha a seis meses está bien. <strong>Falta el número de Jano</strong>: hasta que no esté, el total es un piso, no un techo.</p>
-    </div>
-
     <div class="hl">
-      <span class="badge b-gold">Dónde recortar si hace falta</span>
-      <h3>Los 185.000 que sobran están todos en un lugar</h3>
-      <p>Si quieren volver al millón sin tocar los caramelos ni la casa, el único rubro con margen real es <strong>transporte</strong>: manejando ustedes en vez de contratar chofer se ahorran 68.000 por cabeza, y bajando de dos autos a uno solo grande otros 60.000 — aunque eso último les saca la redundancia en el ripio del Hornocal y los obliga a moverse siempre los diez juntos.</p>
-      <p style="margin-top:10px">La otra palanca es <strong>comida</strong>: parrilla en la casa cuatro de las cinco noches en vez de comer afuera son unos 85.000. Con la casa que reservaron, eso además es de lo mejor del viaje.</p>
-      <p style="margin-top:10px"><strong>Lo que no recortaría es el chofer del sábado.</strong> Es el día del desentierro, van a estar tomando desde el mediodía en Uquía y Humahuaca, y vuelven de noche por la RN 9 en la provincia con alcohol cero y operativo reforzado de carnaval.</p>
+      <span class="badge b-gold">Cómo leer esto</span>
+      <h3>Hay dos tipos de gasto y se comportan al revés</h3>
+      <p><strong>Los que escalan por cabeza</strong> —vuelo, comida, carnaval, caramelos— no cambian por persona si son más o menos. Sumar gente no los abarata.</p>
+      <p><strong>Los fijos del grupo</strong> —la casa y los autos— se dividen entre todos. Ahí sí, cuanta más gente, más barato le sale a cada uno. Por eso ir de cinco es dramáticamente más caro que ir de diez: la casa cuesta lo mismo.</p>
+      <p style="margin-top:12px"><strong>Y hay un escalón:</strong> los autos tienen 5 asientos, así que a partir de la persona número 11 hace falta un tercero. Sumar el pasajero 11 <em>encarece</em> a todos en vez de abaratarlos. Si están cerca de ese número, o se quedan en 10 o conviene saltar directo a 13-14 para diluir el auto extra.</p>
     </div>
 
     <div class="grid g4">
       <div class="card">
         <div class="card-label">Ahorro Salta vs Jujuy</div>
         <div class="card-value">745.037</div>
-        <p class="card-sub">Pesos por cabeza que se ahorran volando a Salta en lugar de Jujuy. Casi 7,5 millones para los diez, a cambio de 3 horas de ruta.</p>
+        <p class="card-sub">Pesos por cabeza que se ahorran volando a Salta en lugar de Jujuy. A cambio de 3 horas de ruta.</p>
       </div>
       <div class="card t2">
         <div class="card-label">Efectivo obligatorio</div>
@@ -761,7 +777,7 @@
       <div class="card t3">
         <div class="card-label">Pendiente · Jano</div>
         <div class="card-value">Mimosas</div>
-        <p class="card-sub">Es el único ítem sin monto de todo el presupuesto. Hasta que Jano no lo cierre, el total de arriba es un piso y no un techo.</p>
+        <p class="card-sub">Cargalo arriba y el total se actualiza solo. Mientras esté en cero, el número que ves es un piso.</p>
       </div>
       <div class="card t4">
         <div class="card-label">Costo oculto</div>
@@ -945,7 +961,7 @@
         <tr class="dim"><td>Peñas de Balcarce</td><td>La Panadería del Chuña (446)<br>La Casona del Molino<br>Chaqueño Palavecino (935)</td><td>0387 431-2896<br>0387 434-2835<br>0387 403-0735</td><td><strong>No entran con este vuelo:</strong> los shows arrancan 21:30 y el avión sale 22:46. Sólo si cambian al vuelo de Aerolíneas de las 19:00 y sacrifican el viñedo — o si alguna vez mueven el viaje un día</td></tr>
 
         <tr class="sect-row"><td colspan="4">Transporte</td></tr>
-        <tr><td>Alquiler de autos</td><td>Aeropuerto Güemes, Salta</td><td>Hertz, Alamo, Avis, Localiza, Europcar</td><td>Chevrolet Spin 7 plazas ~ARS 126.879/día. Mejor precio reservando a ~75 días</td></tr>
+        <tr><td><strong>Alquiler de autos</strong></td><td>Aeropuerto Güemes, Salta</td><td>Hertz, Alamo, Avis, Localiza, Europcar</td><td><strong>2 × Fiat Cronos AT (Standard 4/5 Door) · USD 275,11 c/u</strong> por el período, tarifa estándar. 5 asientos y 3 valijas cada uno, 8,3 l/100km. La tarifa "Inclusivo" sale USD 321,78 — vale preguntar qué cubre de más antes de descartarla</td></tr>
         <tr><td>Combis con chofer</td><td>saltaguia.com.ar</td><td>+54 9 387 683-9447</td><td>15 y 19 asientos con papeles CNRT. Piden reserva con 30 días</td></tr>
         <tr><td>Esencial Turismo <span style="color:var(--tinta-mute)">· EVT 15.635</span></td><td>Salta</td><td>+54 9 387 683-8396</td><td>Minivan hasta 19 o minibús hasta 22. Sección de grupos</td></tr>
         <tr><td>Turismo La Quebrada</td><td>Buenos Aires 39, Salta</td><td>+54 9 387 227-3942</td><td>Tarifario público: Humahuaca + Hornocal $96.000 · Salinas Grandes $57.000</td></tr>
@@ -964,9 +980,9 @@
     <div class="f-title">Despedida de Rodri</div>
     <p style="font-size:15px;color:#b6c2c8">Quebrada de Humahuaca · 5 al 9 de febrero de 2027</p>
     <p class="f-meta">
-      Versión 2.2 · actualizada el 18 de agosto de 2026<br>
-      <strong style="color:var(--ocre)">Cambios de esta versión:</strong> visita a viñedo movida al último día · Bodega Kindgard en Purmamarca, sobre la ruta al aeropuerto · <strong>corregido un error: Dupont abre de lunes a sábado, estaba mal puesta el domingo 7</strong> · agenda de bodegas de la ruta del vino de Jujuy con días y horarios reales · las peñas de Balcarce no entran con el vuelo de las 22:46<br>
-      <span style="color:#6f7f88">v2.1 · casa de Tilcara reservada por USD 1.584,25 · ítems Caramelos y Mimosas · v2.0 · base mudada de Salta capital a Tilcara · vuelos tarde/noche con precios reales de Despegar</span><br>
+      Versión 3.0 · actualizada el 18 de agosto de 2026<br>
+      <strong style="color:var(--ocre)">Cambios de esta versión:</strong> la sección Plata pasó a ser <strong>Presupuesto</strong>, ahora es una calculadora en vivo de 5 a 15 personas · <strong>Rodri no paga</strong>, su parte se reparte entre los demás · precio real de los autos (2 × Fiat Cronos AT, USD 275,11 c/u) · la cantidad de autos se recalcula sola según el grupo · las mimosas de Jano se cargan a mano<br>
+      <span style="color:#6f7f88">v2.2 · viñedo el último día en Bodega Kindgard · corregido: Dupont cierra domingos · v2.1 · casa de Tilcara reservada por USD 1.584,25 · v2.0 · base mudada a Tilcara y vuelos con precios reales de Despegar</span><br>
       Fechas de carnaval confirmadas por la Secretaría de Turismo y Cultura de Jujuy · Precios de vuelos: Despegar, 18-ago-2026, precio final con impuestos · Precios en pesos sujetos a inflación, la referencia estable es el dólar
     </p>
   </div>
@@ -974,6 +990,116 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+/* ===== CALCULADORA DE PRESUPUESTO ===== */
+(function(){
+  var R = 1545;                      // ARS por USD
+  var CASA_USD = 1584.25;            // reservada, total del grupo, 4 noches
+  var AUTO_USD = 275.11;             // Fiat Cronos AT, tarifa estandar, por el periodo
+  var NAFTA_AUTO = 180000;           // ARS por auto: ~900 km a 8,3 l/100km
+  var ASIENTOS = 5;                  // por auto
+  var CAMAS_CASA = 10;               // capacidad de la casa reservada
+  var CHOFER_COM = 900000;           // combi con chofer 2 dias, solo modo comodo
+
+  // costos que escalan por persona (ARS)
+  var PP = [
+    {k:'Vuelo ida y vuelta', aus:328445, com:344163,
+     d:{aus:'JetSMART 21:05 + noche de hotel en Salta', com:'Aerolíneas 12:50, sube directo con luz'}},
+    {k:'Comida y bebida', aus:225000, com:310000,
+     d:{aus:'Parrilla en la casa y mercado', com:'Comer afuera todos los días'}},
+    {k:'Carnaval y actividades', aus:125000, com:260000,
+     d:{aus:'Talco, chicha, fortín y Bodega Kindgard', com:'+ excursiones guiadas y chofer para el vino'}},
+    {k:'Caramelos', aus:100000, com:100000, d:{aus:'Monto fijo por cabeza', com:'Monto fijo por cabeza'}}
+  ];
+
+  var modo = 'aus';
+  var $ = function(id){ return document.getElementById(id); };
+  var fmt = function(n){ return Math.round(n).toLocaleString('es-AR'); };
+  var usd = function(n){ return 'USD ' + Math.round(n/R).toLocaleString('es-AR'); };
+
+  function calc(){
+    var N = parseInt($('nPers').value,10);
+    var mim = parseFloat($('mimosas').value) || 0;
+    var pagan = N - 1;                       // Rodri no paga
+    var autos = Math.ceil(N / ASIENTOS);
+
+    var filas = [], totalGrupo = 0;
+
+    PP.forEach(function(r){
+      var unit = r[modo], tot = unit * N;
+      totalGrupo += tot;
+      filas.push({k:r.k, esc:r.d[modo], tot:tot, cls:'percap'});
+    });
+
+    if (mim > 0){
+      var tm = mim * N; totalGrupo += tm;
+      filas.push({k:'Mimosas', esc:'Monto cargado por Jano', tot:tm, cls:'percap'});
+    }
+
+    var casa = CASA_USD * R; totalGrupo += casa;
+    filas.push({k:'Casa en Tilcara · 4 noches', esc:'USD 1.584,25 el total, reservada', tot:casa, cls:'fijo'});
+
+    var ta = autos * AUTO_USD * R; totalGrupo += ta;
+    filas.push({k:'Alquiler de autos', esc:autos+' × Fiat Cronos AT · USD 275,11 c/u', tot:ta, cls:'fijo'});
+
+    var tn = autos * NAFTA_AUTO; totalGrupo += tn;
+    filas.push({k:'Nafta', esc:'~900 km por auto a 8,3 l/100km', tot:tn, cls:'fijo'});
+
+    if (modo === 'com'){
+      totalGrupo += CHOFER_COM;
+      filas.push({k:'Combi con chofer', esc:'2 días: desentierro y ruta del vino', tot:CHOFER_COM, cls:'fijo'});
+    }
+
+    var porPagador = totalGrupo / pagan;
+    var sinRodri   = totalGrupo / N;
+
+    $('porPagador').textContent    = '$ ' + fmt(porPagador);
+    $('porPagadorUsd').textContent = usd(porPagador) + '  ·  si pagara Rodri serían $ ' + fmt(sinRodri);
+    $('totalGrupo').textContent    = '$ ' + fmt(totalGrupo);
+    $('cantPagan').textContent     = pagan + ' de ' + N;
+    $('cantAutos').textContent     = autos + (autos === 1 ? ' auto' : ' autos') + ' · ' + (autos*ASIENTOS) + ' asientos';
+    $('recargoRodri').textContent  = '+ $ ' + fmt(porPagador - sinRodri);
+
+    var html = '';
+    filas.forEach(function(f){
+      html += '<tr class="'+f.cls+'"><td><strong>'+f.k+'</strong></td><td style="color:var(--tinta-soft);font-size:13.5px">'+f.esc+'</td>'
+           +  '<td class="num">$ '+fmt(f.tot)+'</td><td class="num">$ '+fmt(f.tot/pagan)+'</td></tr>';
+    });
+    html += '<tr class="total"><td>TOTAL</td><td>'+N+' personas · pagan '+pagan+'</td>'
+         +  '<td class="num">$ '+fmt(totalGrupo)+'<br><span style="font-weight:400;font-size:12px">'+usd(totalGrupo)+'</span></td>'
+         +  '<td class="num">$ '+fmt(porPagador)+'<br><span style="font-weight:400;font-size:12px">'+usd(porPagador)+'</span></td></tr>';
+    $('filas').innerHTML = html;
+
+    // avisos contextuales
+    var av = '';
+    if (N > CAMAS_CASA){
+      av += '<div class="aviso rojo"><strong>La casa es para '+CAMAS_CASA+'.</strong> Con '+N+' personas hace falta alojamiento extra y este cálculo no lo incluye — el número real va a ser más alto. Hay que renegociar con el dueño o sumar una segunda propiedad.</div>';
+    } else if (N < CAMAS_CASA){
+      av += '<div class="aviso amar"><strong>La casa se paga igual.</strong> Están reservadas '+CAMAS_CASA+' camas por USD 1.584,25 vayan '+N+' o vayan '+CAMAS_CASA+'. Cada persona que falta encarece a las demás en unos $ '+fmt((CASA_USD*R)/(N-1) - (CASA_USD*R)/CAMAS_CASA)+'.</div>';
+    }
+    if (N === ASIENTOS*autos){
+      av += '<div class="aviso amar"><strong>Los autos van justos.</strong> '+autos+' × '+ASIENTOS+' asientos son exactamente '+N+' lugares, sin margen. Y son 3 valijas por auto: <strong>'+(autos*3)+' valijas para '+N+' personas.</strong> Mochila de mano o se despacha poco.</div>';
+    }
+    if (N === 11 || N === 12){
+      av += '<div class="aviso rojo"><strong>Estás justo pasando el escalón del tercer auto.</strong> Con 10 cada uno paga menos que con 11: sumar la persona 11 obliga a un auto más y encarece a todos. O se quedan en 10, o conviene saltar a 13-14 para diluirlo.</div>';
+    }
+    if (mim === 0){
+      av += '<div class="aviso verde"><strong>Falta el número de Jano.</strong> Las mimosas están en cero, así que este total es un piso y no un techo.</div>';
+    }
+    $('avisos').innerHTML = av;
+  }
+
+  $('nPers').addEventListener('change', calc);
+  $('mimosas').addEventListener('input', calc);
+  Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(b){
+    b.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.seg-btn'), function(x){ x.classList.remove('active'); });
+      b.classList.add('active'); modo = b.dataset.modo; calc();
+    });
+  });
+  calc();
+})();
+
+/* ===== COUNTDOWN Y MAPA ===== */
 (function(){
   var target = new Date('2027-02-05T12:50:00-03:00').getTime();
   var el = document.getElementById('cd');
